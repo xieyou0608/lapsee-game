@@ -1,0 +1,26 @@
+.card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+
+  width: 6.5rem;
+  height: 8.5rem;
+  border-style: solid;
+  border-radius: 1rem;
+  background-color: white;
+
+  margin: 0.5rem;
+  transition: 0.5s;
+}
+
+.fold {
+  cursor: default;
+  background-color: rgb(58, 11, 11);
+  color: rgb(58, 11, 11);
+}
+
+.fold:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}

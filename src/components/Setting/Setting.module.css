@@ -1,0 +1,11 @@
+.setting-section div {
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.setting-section div h3 {
+  display: inline-block;
+  width: 5rem;
+  margin: 1rem;
+}

@@ -1,0 +1,9 @@
+.logo {
+  margin: 2rem;
+}
+.logo h1,
+h2 {
+  text-align: center;
+  font-size: 2.5em;
+  margin: 1rem;
+}

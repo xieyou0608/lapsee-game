@@ -1,0 +1,20 @@
+.start-btn {
+  background-color: #8c2929;
+  color: white;
+  width: 15rem;
+  height: 4rem;
+  font-size: 2rem;
+  font-weight: bold;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.start-btn:hover {
+  transform: scale(1.1);
+}
+
+.start-btn:active {
+  opacity: 0.5;
+  transform: scale(1);
+}
