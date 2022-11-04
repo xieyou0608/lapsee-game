@@ -8,8 +8,10 @@
 
 .board {
   width: 35rem;
-  display: flex;
-  flex-wrap: wrap;
+  margin: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 1rem;
 }
 
 .score {

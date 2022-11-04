@@ -1,86 +1,93 @@
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import classes from "./GameBoard.module.css";
+import lapseeImgs from "./LapseeImgs";
 
 const GameBoard = ({ numCards, setIsPlaying }) => {
-  let lapseeImgs = [...Array(numCards / 2).keys()];
-  lapseeImgs = lapseeImgs.concat([...lapseeImgs]);
-  const lapseeDeck = [];
-  for (const img of lapseeImgs) {
-    lapseeDeck.push({ img: img, flipped: false, matched: false });
-  }
-  lapseeDeck.sort(() => Math.random() - 0.5); //shuffle
-
-  const [deck, setDeck] = useState([...lapseeDeck]);
-  const [flipped, setFlipped] = useState([]); // record index of flipped card
+  const [deck, setDeck] = useState([]);
+  const [chosen, setChosen] = useState([]);
   const [steps, setSteps] = useState(0);
   const [pairs, setPairs] = useState(0);
 
-  const openOneCard = (cardIdx) => {
-    setDeck((prevState) => {
-      let newState = [...prevState];
-      newState[cardIdx].flipped = true;
-      return newState;
+  const shuffleCards = () => {
+    const slicedImgs = lapseeImgs.slice(0, numCards / 2);
+    const cards = [
+      ...JSON.parse(JSON.stringify(slicedImgs)),
+      ...JSON.parse(JSON.stringify(slicedImgs)),
+    ]
+      .sort(() => Math.random() - 0.5)
+      .map((card) => ({ ...card, matched: false, id: Math.random() }));
+
+    setDeck(cards);
+    setChosen([]);
+    setSteps(0);
+    setPairs(0);
+  };
+
+  const flipCard = (card) => {
+    setChosen((prev) => {
+      // 防止連點兩下同一張牌，或連點三張牌
+      if ((prev.length === 1 && prev[0].id === card.id) || prev.length === 2) {
+        return prev;
+      } else {
+        return [...prev, card];
+      }
     });
   };
 
-  const matchTwoCard = (firstCardIdx, secondCardIdx) => {
-    setDeck((prevState) => {
-      let newState = [...prevState];
-      newState[firstCardIdx].matched = true;
-      newState[secondCardIdx].matched = true;
-      return newState;
-    });
+  const matchTwoCard = (mark) => {
+    setDeck((prevDeck) =>
+      prevDeck.map((card) =>
+        card.mark === mark ? { ...card, matched: true } : card
+      )
+    );
+    setChosen([]);
     setPairs((prev) => prev + 1);
   };
 
-  const foldTwoCard = (firstCardIdx, secondCardIdx) => {
-    setDeck((prevState) => {
-      let newState = [...prevState];
-      newState[firstCardIdx].flipped = false;
-      newState[secondCardIdx].flipped = false;
-      return newState;
-    });
-  };
-
-  const flipCard = (cardIdx) => {
-    if (flipped.length < 2) {
-      setSteps((prev) => prev + 1);
-      setFlipped((prev) => [...prev, cardIdx]);
-      openOneCard(cardIdx);
-    }
-  };
-  console.log(pairs, numCards);
+  useEffect(shuffleCards, []);
 
   useEffect(() => {
     let timer;
-    if (flipped.length === 2) {
-      const [first, second] = flipped;
-      if (deck[first].img === deck[second].img) {
-        matchTwoCard(first, second);
-        setFlipped([]);
+    if (chosen.length === 2) {
+      const [first, second] = chosen;
+      if (first.id === second.id) {
+        setChosen([first]);
+        return;
+      }
+      setSteps((prev) => prev + 1);
+      if (first.mark === second.mark) {
+        matchTwoCard(first.mark);
       } else {
         timer = setTimeout(() => {
-          foldTwoCard(first, second);
-          setFlipped([]);
+          setChosen([]);
         }, 1000);
       }
     }
-    if (pairs === numCards / 2) {
-      timer = setTimeout(() => {
-        alert("恭喜!");
-      }, 500);
-    }
+
     return () => {
       clearTimeout(timer);
     };
-  }, [flipped, deck, steps, pairs]);
+  }, [chosen]);
+
+  useEffect(() => {
+    if (pairs === numCards / 2) {
+      setTimeout(() => {
+        alert("恭喜!");
+      }, 500);
+    }
+  }, [pairs]);
 
   return (
     <section className={classes["game-section"]}>
       <div className={classes.board}>
-        {deck.map((card, idx) => (
-          <Card key={idx} card={card} idx={idx} flipCard={flipCard} />
+        {deck.map((card) => (
+          <Card
+            key={card.id}
+            card={card}
+            flipCard={flipCard}
+            isOpened={chosen.includes(card) || card.matched}
+          />
         ))}
       </div>
       <div className={classes.score}>

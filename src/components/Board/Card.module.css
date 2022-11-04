@@ -6,21 +6,42 @@
 
   width: 6.5rem;
   height: 8.5rem;
-  border-style: solid;
-  border-radius: 1rem;
-  background-color: white;
 
-  margin: 0.5rem;
-  transition: 0.5s;
+  position: relative;
 }
 
-.fold {
-  cursor: default;
+.card img {
+  width: 6.5rem;
+  height: 8.5rem;
+  border-style: solid;
+  border-radius: 1rem;
+}
+
+.card .front {
+  transform: rotateY(90deg);
+  transition: all ease-in 0.2s;
+  position: absolute;
+}
+
+.opened .front {
+  transform: scale(1) rotateY(0deg);
+  transition-delay: 0.2s;
+}
+
+.card .back {
+  transform: rotateY(0deg);
+  transition: all ease-in 0.2s;
+  transition-delay: 0.2s;
+
   background-color: rgb(58, 11, 11);
   color: rgb(58, 11, 11);
 }
 
-.fold:hover {
-  transform: scale(1.1);
+.card .back:hover {
   cursor: pointer;
+}
+
+.opened .back {
+  transform: rotateY(90deg);
+  transition-delay: 0s;
 }
