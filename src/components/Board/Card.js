@@ -12,11 +12,11 @@ const Card = ({ card, flipCard, isOpened }) => {
 
   return (
     <div className={style}>
-      <img src={card.src} alt={card.mark} className={classes.front} />
+      <img className={classes.front} src={card.src} alt={card.mark} />
       <img
-        src={card.src}
-        alt={card.mark}
         className={classes.back}
+        src="./img/cards/card-back.png"
+        alt={card.mark}
         onClick={flipCardHandler}
       />
     </div>
