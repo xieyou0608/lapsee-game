@@ -3,11 +3,13 @@ import classes from "./CardModal.module.css";
 
 const CardModal = (props) => {
   const { card, onConfirm } = props;
+  const cardSrc = require(`../../assets/card-images/${card.name}.PNG`);
+
   return (
     <React.Fragment>
       <div className={classes["backdrop"]} onClick={onConfirm} />
       <div className={classes["modal"]}>
-        <img src={card.src} alt={card.name} />
+        <img src={cardSrc} alt={card.name} />
         <div className={classes["cardInfo"]}>
           <header className={classes["title"]}>
             <h2>{card.name}</h2>

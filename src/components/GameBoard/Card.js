@@ -1,5 +1,6 @@
 import React from "react";
 import classes from "./Card.module.css";
+
 const Card = ({ card, flipCard, isOpened }) => {
   const flipCardHandler = () => {
     flipCard(card);
@@ -14,12 +15,15 @@ const Card = ({ card, flipCard, isOpened }) => {
     style = classes.card + " " + classes.opened + " " + classes.matched;
   }
 
+  const cardSrc = require(`../../assets/card-images/${card.name}.PNG`);
+  const backSrc = require("../../assets/card-images/card-back.png");
+
   return (
     <div className={style}>
-      <img className={classes.front} src={card.src} alt={card.mark} />
+      <img className={classes.front} src={cardSrc} alt={card.mark} />
       <img
         className={classes.back}
-        src="./img/cards/card-back.png"
+        src={backSrc}
         alt={card.mark}
         onClick={flipCardHandler}
       />
