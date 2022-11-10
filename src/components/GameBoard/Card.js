@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import classes from "./Card.module.css";
 const Card = ({ card, flipCard, isOpened }) => {
   const flipCardHandler = () => {
@@ -7,7 +7,11 @@ const Card = ({ card, flipCard, isOpened }) => {
 
   let style = classes.card;
   if (isOpened) {
-    style = style + " " + classes.opened;
+    style = classes.card + " " + classes.opened;
+  }
+
+  if (card.matched) {
+    style = classes.card + " " + classes.opened + " " + classes.matched;
   }
 
   return (

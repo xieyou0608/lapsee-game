@@ -3,7 +3,7 @@ import classes from "./App.module.css";
 import Header from "./components/UI/Header";
 import StartButton from "./components/UI/StartButton";
 import Setting from "./components/Setting/Setting";
-import GameBoard from "./components/Board/GameBoard";
+import GameBoard from "./components/GameBoard/GameBoard";
 
 function App() {
   const [numCards, setNumCards] = useState(8);

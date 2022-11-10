@@ -45,3 +45,17 @@
   transform: rotateY(90deg);
   transition-delay: 0s;
 }
+
+.matched {
+  animation: fadeOut 1s ease;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

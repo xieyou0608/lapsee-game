@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import classes from "./GameBoard.module.css";
 import lapseeImgs from "./LapseeImgs";
+import CardModal from "../UI/CardModal";
+import MessageModal from "../UI/MessageModal";
 
 const GameBoard = ({ numCards, setIsPlaying }) => {
   const [deck, setDeck] = useState([]);
   const [chosen, setChosen] = useState([]);
   const [steps, setSteps] = useState(0);
   const [pairs, setPairs] = useState(0);
+  const [showCard, setShowCard] = useState(null);
+  const [isDone, setIsDone] = useState(false);
 
   const shuffleCards = () => {
     const slicedImgs = lapseeImgs.slice(0, numCards / 2);
@@ -35,14 +39,24 @@ const GameBoard = ({ numCards, setIsPlaying }) => {
     });
   };
 
-  const matchTwoCard = (mark) => {
+  const matchTwoCard = (matchedCard) => {
     setDeck((prevDeck) =>
       prevDeck.map((card) =>
-        card.mark === mark ? { ...card, matched: true } : card
+        card.mark === matchedCard.mark ? { ...card, matched: true } : card
       )
     );
     setChosen([]);
     setPairs((prev) => prev + 1);
+    setShowCard(matchedCard);
+  };
+
+  const closeCardModal = () => {
+    setShowCard(null);
+  };
+
+  const finishGame = () => {
+    setIsDone(false);
+    setIsPlaying(false);
   };
 
   useEffect(shuffleCards, []);
@@ -57,7 +71,9 @@ const GameBoard = ({ numCards, setIsPlaying }) => {
       }
       setSteps((prev) => prev + 1);
       if (first.mark === second.mark) {
-        matchTwoCard(first.mark);
+        timer = setTimeout(() => {
+          matchTwoCard(first);
+        }, 500);
       } else {
         timer = setTimeout(() => {
           setChosen([]);
@@ -71,29 +87,37 @@ const GameBoard = ({ numCards, setIsPlaying }) => {
   }, [chosen]);
 
   useEffect(() => {
-    if (pairs === numCards / 2) {
-      setTimeout(() => {
-        alert("恭喜!");
-      }, 500);
+    if (pairs === numCards / 2 && !showCard) {
+      setIsDone(true);
     }
-  }, [pairs]);
+  }, [pairs, showCard]);
 
   return (
-    <section className={classes["game-section"]}>
-      <div className={classes.board}>
-        {deck.map((card) => (
-          <Card
-            key={card.id}
-            card={card}
-            flipCard={flipCard}
-            isOpened={chosen.includes(card) || card.matched}
-          />
-        ))}
-      </div>
-      <div className={classes.score}>
-        <h4>次數: {steps}</h4>
-      </div>
-    </section>
+    <React.Fragment>
+      {showCard && <CardModal card={showCard} onConfirm={closeCardModal} />}
+      {isDone && (
+        <MessageModal
+          title="過關"
+          content="恭喜你成功配對所有卡片！"
+          onConfirm={finishGame}
+        />
+      )}
+      <section className={classes["game-section"]}>
+        <div className={classes.board}>
+          {deck.map((card) => (
+            <Card
+              key={card.id}
+              card={card}
+              flipCard={flipCard}
+              isOpened={chosen.includes(card)}
+            />
+          ))}
+        </div>
+        <div className={classes.score}>
+          <h4>次數: {steps}</h4>
+        </div>
+      </section>
+    </React.Fragment>
   );
 };
 
