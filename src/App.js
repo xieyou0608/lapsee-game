@@ -15,7 +15,10 @@ function App() {
   };
 
   return (
-    <div className={classes.app}>
+    <div
+      className={classes.app}
+      style={{ backgroundColor: isPlaying ? "#d9d9d9" : "" }}
+    >
       {!isPlaying && (
         <React.Fragment>
           <Header />

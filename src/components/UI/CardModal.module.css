@@ -82,10 +82,29 @@
   transform: scale(1);
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .modal {
-    left: calc(50% - 20rem);
-    width: 40rem;
+    flex-direction: column;
+    top: 10%;
+    left: 20%;
+    width: 60%;
+  }
+
+  .modal img {
+    width: 100%;
+    height: auto;
+  }
+
+  .title {
+    background-color: white;
+    padding: 1rem;
+  }
+
+  .title h2 {
+    margin: 0;
+    color: black;
+    font-size: 1rem;
+    text-align: start;
   }
 }
 

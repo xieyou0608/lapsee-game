@@ -1,8 +1,30 @@
-.score {
-  width: 15rem;
-  font-size: 3rem;
+.player-name {
+  border-radius: 1.5rem;
+  padding: 0.5rem 1rem;
+  color: black;
+  font-weight: bolder;
 }
-
 .playing {
   background-color: red;
+  color: white;
+}
+
+.player-img {
+  width: 50%;
+}
+
+.score {
+  width: 80%;
+  background-color: #f4d744;
+  border-radius: 1.5rem;
+  text-align: center;
+  font-size: 2rem;
+  color: #0434ff;
+  font-weight: bolder;
+}
+
+@media (min-width: 600px) {
+  .player-img {
+    width: 100%;
+  }
 }

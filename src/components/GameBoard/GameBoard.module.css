@@ -1,15 +1,30 @@
-.game-section {
-  margin: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 35rem;
-}
-
 .board {
-  width: 35rem;
   margin: 2rem;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 1rem;
+  grid-template-columns: auto auto auto auto;
+  grid-template-rows: repeat(4, 20vh);
+}
+.board4 {
+  grid-template-rows: repeat(1, 20vh);
+}
+
+.board8 {
+  grid-template-rows: repeat(2, 20vh);
+}
+
+.board12 {
+  grid-template-rows: repeat(3, 20vh);
+}
+
+.board16 {
+  grid-template-rows: repeat(4, 20vh);
+}
+
+@media (max-width: 600px) {
+  .board {
+    grid-gap: 0.5rem;
+    grid-template-columns: repeat(4, 20vw);
+    grid-template-rows: auto auto auto auto;
+  }
 }

@@ -5,6 +5,7 @@ import lapseeImgs from "./LapseeImgs";
 import CardModal from "../UI/CardModal";
 import MessageModal from "../UI/MessageModal";
 import Player from "./Player";
+import { Box, Grid } from "@mui/material";
 
 const GameBoard = ({ numCards, numPlayers, setIsPlaying }) => {
   const [deck, setDeck] = useState([]);
@@ -117,6 +118,29 @@ const GameBoard = ({ numCards, numPlayers, setIsPlaying }) => {
     }
   }, [pairs, showCard, score, numPlayers]);
 
+  const boardSytle = classes.board + " " + classes[`board${numCards}`];
+  const layoutBoard = (
+    <div className={boardSytle}>
+      {deck.map((card) => (
+        <Card
+          key={card.id}
+          card={card}
+          flipCard={flipCard}
+          isOpened={chosen.includes(card)}
+        />
+      ))}
+    </div>
+  );
+
+  const layoutPlayerA = (
+    <Player score={score.A} player="A" isMyTurn={curPlayer == "A"} />
+  );
+
+  const layoutPlayerB =
+    numPlayers == 2 ? (
+      <Player score={score.B} player="B" isMyTurn={curPlayer == "B"} />
+    ) : null;
+
   return (
     <React.Fragment>
       {showCard && <CardModal card={showCard} onConfirm={closeCardModal} />}
@@ -127,22 +151,30 @@ const GameBoard = ({ numCards, numPlayers, setIsPlaying }) => {
           onConfirm={finishGame}
         />
       )}
-      <section className={classes["game-section"]}>
-        <Player score={score.A} player="A" isMyTurn={curPlayer == "A"} />
-        <div className={classes.board}>
-          {deck.map((card) => (
-            <Card
-              key={card.id}
-              card={card}
-              flipCard={flipCard}
-              isOpened={chosen.includes(card)}
-            />
-          ))}
-        </div>
-        {numPlayers == 2 && (
-          <Player score={score.B} player="B" isMyTurn={curPlayer == "B"} />
-        )}
-      </section>
+
+      {/* mobile */}
+      <Box
+        sx={{ display: { xs: "flex", sm: "none", flexDirection: "column" } }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+          }}
+        >
+          {layoutPlayerA}
+          {layoutPlayerB}
+        </Box>
+        {layoutBoard}
+      </Box>
+
+      {/* PC */}
+      <Box sx={{ display: { xs: "none", sm: "flex" }, alignItems: "center" }}>
+        {layoutPlayerA}
+        {layoutBoard}
+        {layoutPlayerB}
+      </Box>
     </React.Fragment>
   );
 };
