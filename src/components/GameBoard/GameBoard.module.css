@@ -13,8 +13,3 @@
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 1rem;
 }
-
-.score {
-  width: 15rem;
-  font-size: 3rem;
-}

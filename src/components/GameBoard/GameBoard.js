@@ -4,14 +4,19 @@ import classes from "./GameBoard.module.css";
 import lapseeImgs from "./LapseeImgs";
 import CardModal from "../UI/CardModal";
 import MessageModal from "../UI/MessageModal";
+import Player from "./Player";
 
-const GameBoard = ({ numCards, setIsPlaying }) => {
+const GameBoard = ({ numCards, numPlayers, setIsPlaying }) => {
   const [deck, setDeck] = useState([]);
   const [chosen, setChosen] = useState([]);
   const [steps, setSteps] = useState(0);
   const [pairs, setPairs] = useState(0);
   const [showCard, setShowCard] = useState(null);
   const [isDone, setIsDone] = useState(false);
+
+  const [curPlayer, setCurPlayer] = useState("A");
+  const [score, setScore] = useState({ A: 0, B: 0 });
+  const [endMessage, setEndMessage] = useState("恭喜你成功配對所有卡片！");
 
   const shuffleCards = () => {
     const slicedImgs = lapseeImgs.slice(0, numCards / 2);
@@ -26,6 +31,7 @@ const GameBoard = ({ numCards, setIsPlaying }) => {
     setChosen([]);
     setSteps(0);
     setPairs(0);
+    setScore({ A: 0, B: 0 });
   };
 
   const flipCard = (card) => {
@@ -48,6 +54,17 @@ const GameBoard = ({ numCards, setIsPlaying }) => {
     setChosen([]);
     setPairs((prev) => prev + 1);
     setShowCard(matchedCard);
+    setScore((prev) => ({
+      ...prev,
+      [curPlayer]: prev[curPlayer] + 1,
+    }));
+  };
+
+  const failMatch = () => {
+    setChosen([]);
+    if (numPlayers === 2) {
+      setCurPlayer((prev) => (prev == "A" ? "B" : "A"));
+    }
   };
 
   const closeCardModal = () => {
@@ -76,7 +93,7 @@ const GameBoard = ({ numCards, setIsPlaying }) => {
         }, 500);
       } else {
         timer = setTimeout(() => {
-          setChosen([]);
+          failMatch();
         }, 1000);
       }
     }
@@ -88,9 +105,17 @@ const GameBoard = ({ numCards, setIsPlaying }) => {
 
   useEffect(() => {
     if (pairs === numCards / 2 && !showCard) {
+      if (numPlayers === 2) {
+        setEndMessage((prev) => {
+          if (score.A > score.B) prev = "玩家 A 贏了！";
+          else if (score.A < score.B) prev = "玩家 B 贏了！";
+          else prev = "平手!";
+          return prev;
+        });
+      }
       setIsDone(true);
     }
-  }, [pairs, showCard]);
+  }, [pairs, showCard, score, numPlayers]);
 
   return (
     <React.Fragment>
@@ -98,11 +123,12 @@ const GameBoard = ({ numCards, setIsPlaying }) => {
       {isDone && (
         <MessageModal
           title="過關"
-          content="恭喜你成功配對所有卡片！"
+          content={endMessage}
           onConfirm={finishGame}
         />
       )}
       <section className={classes["game-section"]}>
+        <Player score={score.A} player="A" isMyTurn={curPlayer == "A"} />
         <div className={classes.board}>
           {deck.map((card) => (
             <Card
@@ -113,9 +139,9 @@ const GameBoard = ({ numCards, setIsPlaying }) => {
             />
           ))}
         </div>
-        <div className={classes.score}>
-          <h4>次數: {steps}</h4>
-        </div>
+        {numPlayers == 2 && (
+          <Player score={score.B} player="B" isMyTurn={curPlayer == "B"} />
+        )}
       </section>
     </React.Fragment>
   );

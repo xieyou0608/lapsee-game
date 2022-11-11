@@ -29,7 +29,11 @@ function App() {
         </React.Fragment>
       )}
       {isPlaying && (
-        <GameBoard numCards={numCards} setIsPlaying={setIsPlaying} />
+        <GameBoard
+          numCards={numCards}
+          numPlayers={numPlayers}
+          setIsPlaying={setIsPlaying}
+        />
       )}
     </div>
   );

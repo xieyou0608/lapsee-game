@@ -1,0 +1,8 @@
+.score {
+  width: 15rem;
+  font-size: 3rem;
+}
+
+.playing {
+  background-color: red;
+}
