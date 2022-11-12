@@ -1,13 +1,17 @@
 .start-btn {
-  background-color: #8c2929;
+  background-color: #785003;
   color: white;
-  width: 15rem;
-  height: 4rem;
-  font-size: 2rem;
+  font-size: 2vw;
   font-weight: bold;
-  border-radius: 2rem;
+  border-radius: 10px;
+  border-style: none;
+
   cursor: pointer;
   transition: 0.5s;
+
+  width: 20vw;
+  height: 4vw;
+  margin: 0.5vw;
 }
 
 .start-btn:hover {
@@ -17,4 +21,13 @@
 .start-btn:active {
   opacity: 0.5;
   transform: scale(1);
+}
+
+@media (max-width: 600px) {
+  .start-btn {
+    width: 60vw;
+    height: 10vw;
+    font-size: 5vw;
+    margin: 1vw;
+  }
 }

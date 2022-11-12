@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import classes from "./App.module.css";
-import Header from "./components/UI/Header";
-import StartButton from "./components/UI/StartButton";
-import Setting from "./components/Setting/Setting";
+import HomePage from "./pages/HomePage";
 import GameBoard from "./components/GameBoard/GameBoard";
 
 function App() {
@@ -10,7 +8,8 @@ function App() {
   const [numPlayers, setNumPlayers] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false); // Maybe replace it with react-router
 
-  const gameStartHandler = () => {
+  const startGame = (numOfPlayers) => {
+    setNumPlayers(numOfPlayers);
     setIsPlaying(true);
   };
 
@@ -20,16 +19,11 @@ function App() {
       style={{ backgroundColor: isPlaying ? "#d9d9d9" : "" }}
     >
       {!isPlaying && (
-        <React.Fragment>
-          <Header />
-          <Setting
-            numCards={numCards}
-            setNumCards={setNumCards}
-            numPlayers={numPlayers}
-            setNumPlayers={setNumPlayers}
-          />
-          <StartButton onClick={gameStartHandler}>開始遊戲</StartButton>
-        </React.Fragment>
+        <HomePage
+          numCards={numCards}
+          setNumCards={setNumCards}
+          startGame={startGame}
+        />
       )}
       {isPlaying && (
         <GameBoard

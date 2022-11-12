@@ -3,9 +3,9 @@ import classes from "./Header.module.css";
 
 const Header = () => {
   return (
-    <header className={classes.logo}>
-      <h1>Lapsee</h1>
-      <h2>Memory Matching Game</h2>
+    <header className={classes.appTitle}>
+      <h1>糟了媒體小鎮！</h1>
+      <h2>媒體對對碰</h2>
     </header>
   );
 };
