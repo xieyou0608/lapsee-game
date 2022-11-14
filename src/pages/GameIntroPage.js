@@ -1,16 +1,11 @@
 import React, { useState } from "react";
 import classes from "./GameIntroPage.module.css";
-import { useNavigate } from "react-router-dom";
-import card1Img from "../assets/card-images/資訊精靈.PNG";
-import card2Img from "../assets/card-images/假資訊.PNG";
-import card3Img from "../assets/card-images/電影.PNG";
-import card4Img from "../assets/card-images/網際網路村長.PNG";
+import { cardImages } from "../assets/card-images/CardImages";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import MemoryIntro from "../components/GameIntro/MemoryIntro";
 import QuizIntro from "../components/GameIntro/QuizIntro";
 
 const GameIntroPage = () => {
-  const navigate = useNavigate();
   const [showMemoryIntro, setShowMemoryIntro] = useState(false);
   const [showQuizIntro, setShowQuizIntro] = useState(false);
 
@@ -25,6 +20,11 @@ const GameIntroPage = () => {
     setShowMemoryIntro(false);
     setShowQuizIntro(false);
   };
+
+  const card1Img = cardImages[0].src;
+  const card2Img = cardImages[1].src;
+  const card3Img = cardImages[2].src;
+  const card4Img = cardImages[3].src;
 
   return (
     <React.Fragment>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Layout/Header";
 import Setting from "../components/Setting/Setting";
@@ -7,18 +7,14 @@ import classes from "./HomePage.module.css";
 import figure1 from "../assets/images/figure1.png";
 import figure2 from "../assets/images/figure2.png";
 
-const HomePage = ({ numCards, setNumCards, setNumPlayers }) => {
+const HomePage = ({ setNumPlayers }) => {
   const navigate = useNavigate();
   const singlePlayerStart = () => {
     setNumPlayers(1);
-    navigate("/memory-game");
+    navigate("/intro");
   };
   const twoPlayerStart = () => {
     setNumPlayers(2);
-    navigate("/memory-game");
-  };
-
-  const goToIntro = () => {
     navigate("/intro");
   };
 
@@ -28,9 +24,8 @@ const HomePage = ({ numCards, setNumCards, setNumPlayers }) => {
       <div className={classes.main}>
         <Header />
         {/* <Setting numCards={numCards} setNumCards={setNumCards} /> */}
-        {/* <StartButton onClick={singlePlayerStart}>個人遊戲</StartButton>
-        <StartButton onClick={twoPlayerStart}>雙人遊戲</StartButton> */}
-        <StartButton onClick={goToIntro}>開始遊戲</StartButton>
+        <StartButton onClick={singlePlayerStart}>個人遊戲</StartButton>
+        <StartButton onClick={twoPlayerStart}>雙人遊戲</StartButton>
       </div>
       <img className={classes["figure2"]} src={figure2} alt="" />
     </React.Fragment>

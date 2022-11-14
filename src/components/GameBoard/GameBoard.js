@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Card from "./Card";
 import classes from "./GameBoard.module.css";
-import lapseeImgs from "./LapseeImgs";
+import { cardImages } from "../../assets/card-images/CardImages";
+
+import { Box } from "@mui/material";
+import Card from "./Card";
 import CardModal from "../UI/CardModal";
 import MessageModal from "../UI/MessageModal";
 import Player from "./Player";
-import { Box, Grid } from "@mui/material";
 
 const GameBoard = ({ numCards, numPlayers }) => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const GameBoard = ({ numCards, numPlayers }) => {
   const [endMessage, setEndMessage] = useState("恭喜你成功配對所有卡片！");
 
   const shuffleCards = () => {
-    const slicedImgs = lapseeImgs.slice(0, numCards / 2);
+    const slicedImgs = cardImages.slice(0, numCards / 2);
     const cards = [
       ...JSON.parse(JSON.stringify(slicedImgs)),
       ...JSON.parse(JSON.stringify(slicedImgs)),

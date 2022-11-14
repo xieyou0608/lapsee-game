@@ -15,9 +15,7 @@ const CardModal = (props) => {
             <h2>{card.name}</h2>
           </header>
           <div className={classes["content"]}>
-            <p>
-              {card.information} {card.name}
-            </p>
+            <p>{card.information}</p>
           </div>
           <footer className={classes["action"]}>
             <button className={classes["confirm-btn"]} onClick={onConfirm}>
