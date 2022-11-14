@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Layout/Header";
 import Setting from "../components/Setting/Setting";
 import StartButton from "../components/UI/StartButton";
@@ -6,22 +7,30 @@ import classes from "./HomePage.module.css";
 import figure1 from "../assets/images/figure1.png";
 import figure2 from "../assets/images/figure2.png";
 
-const HomePage = ({ numCards, setNumCards, startGame }) => {
+const HomePage = ({ numCards, setNumCards, setNumPlayers }) => {
+  const navigate = useNavigate();
   const singlePlayerStart = () => {
-    startGame(1);
+    setNumPlayers(1);
+    navigate("/memory-game");
   };
   const twoPlayerStart = () => {
-    startGame(2);
+    setNumPlayers(2);
+    navigate("/memory-game");
+  };
+
+  const goToIntro = () => {
+    navigate("/intro");
   };
 
   return (
     <React.Fragment>
       <img className={classes["figure1"]} src={figure1} alt="" />
-      <div className={classes.homepage}>
+      <div className={classes.main}>
         <Header />
-        <Setting numCards={numCards} setNumCards={setNumCards} />
-        <StartButton onClick={singlePlayerStart}>個人遊戲</StartButton>
-        <StartButton onClick={twoPlayerStart}>雙人遊戲</StartButton>
+        {/* <Setting numCards={numCards} setNumCards={setNumCards} /> */}
+        {/* <StartButton onClick={singlePlayerStart}>個人遊戲</StartButton>
+        <StartButton onClick={twoPlayerStart}>雙人遊戲</StartButton> */}
+        <StartButton onClick={goToIntro}>開始遊戲</StartButton>
       </div>
       <img className={classes["figure2"]} src={figure2} alt="" />
     </React.Fragment>

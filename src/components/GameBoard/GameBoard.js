@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Card from "./Card";
 import classes from "./GameBoard.module.css";
 import lapseeImgs from "./LapseeImgs";
@@ -7,7 +8,8 @@ import MessageModal from "../UI/MessageModal";
 import Player from "./Player";
 import { Box, Grid } from "@mui/material";
 
-const GameBoard = ({ numCards, numPlayers, setIsPlaying }) => {
+const GameBoard = ({ numCards, numPlayers }) => {
+  const navigate = useNavigate();
   const [deck, setDeck] = useState([]);
   const [chosen, setChosen] = useState([]);
   const [steps, setSteps] = useState(0);
@@ -74,7 +76,7 @@ const GameBoard = ({ numCards, numPlayers, setIsPlaying }) => {
 
   const finishGame = () => {
     setIsDone(false);
-    setIsPlaying(false);
+    navigate("/");
   };
 
   useEffect(shuffleCards, []);
@@ -142,7 +144,7 @@ const GameBoard = ({ numCards, numPlayers, setIsPlaying }) => {
     ) : null;
 
   return (
-    <React.Fragment>
+    <div className={classes.app}>
       {showCard && <CardModal card={showCard} onConfirm={closeCardModal} />}
       {isDone && (
         <MessageModal
@@ -175,7 +177,7 @@ const GameBoard = ({ numCards, numPlayers, setIsPlaying }) => {
         {layoutBoard}
         {layoutPlayerB}
       </Box>
-    </React.Fragment>
+    </div>
   );
 };
 

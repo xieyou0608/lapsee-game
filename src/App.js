@@ -1,38 +1,40 @@
 import React, { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import classes from "./App.module.css";
+
 import HomePage from "./pages/HomePage";
-import GameBoard from "./components/GameBoard/GameBoard";
+import IntroPage from "./pages/IntroPage";
+import GameIntroPage from "./pages/GameIntroPage";
+import MemoryGame from "./pages/MemoryGame";
 
 function App() {
   const [numCards, setNumCards] = useState(8);
   const [numPlayers, setNumPlayers] = useState(1);
-  const [isPlaying, setIsPlaying] = useState(false); // Maybe replace it with react-router
-
-  const startGame = (numOfPlayers) => {
-    setNumPlayers(numOfPlayers);
-    setIsPlaying(true);
-  };
 
   return (
-    <div
-      className={classes.app}
-      style={{ backgroundColor: isPlaying ? "#d9d9d9" : "" }}
-    >
-      {!isPlaying && (
-        <HomePage
-          numCards={numCards}
-          setNumCards={setNumCards}
-          startGame={startGame}
-        />
-      )}
-      {isPlaying && (
-        <GameBoard
-          numCards={numCards}
-          numPlayers={numPlayers}
-          setIsPlaying={setIsPlaying}
-        />
-      )}
-    </div>
+    <BrowserRouter>
+      <div className={classes.app}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <HomePage
+                numCards={numCards}
+                setNumCards={setNumCards}
+                setNumPlayers={setNumPlayers}
+              />
+            }
+          />
+          <Route path="/intro" element={<IntroPage />} />
+          <Route path="/game-intro" element={<GameIntroPage />} />
+
+          <Route
+            path="/memory-game"
+            element={<MemoryGame numCards={numCards} numPlayers={numPlayers} />}
+          />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 

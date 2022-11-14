@@ -1,0 +1,20 @@
+.intro {
+  border-style: solid;
+  border-radius: 1rem;
+  padding: 1rem 5rem;
+  background: #ecd878;
+  width: 60vw;
+  font-size: 1.3rem;
+}
+
+.footer {
+  text-align: center;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .intro {
+    padding: 1rem 1rem;
+    font-size: 1rem;
+  }
+}
