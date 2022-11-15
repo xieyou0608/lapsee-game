@@ -1,10 +1,16 @@
 .choices {
   width: 20vw;
   display: grid;
-  grid-template-columns: 1fr 1fr;
 
-  row-gap: 0vh;
-  column-gap: 0vh;
+  row-gap: 0.5vh;
+  column-gap: 0.5vh;
+}
+
+.texts-grid {
+  grid-template-columns: 1fr;
+}
+.images-grid {
+  grid-template-columns: 1fr 1fr;
 }
 
 .choice {
@@ -20,6 +26,13 @@
 
 .choice img {
   width: 100%;
+}
+
+.text-choice {
+  background-color: rgb(82, 44, 4);
+  color: white;
+  padding: 1vh;
+  border-radius: 1vh;
 }
 
 .correct,

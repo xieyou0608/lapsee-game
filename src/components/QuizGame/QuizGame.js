@@ -1,77 +1,88 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { cardImages } from "../../assets/card-images/CardImages";
+import { textQuestions } from "./TextQuestions";
 import GameContainer from "../Game/GameContainer";
 import Player from "../Game/Player";
 
-import Question from "./Question";
-import CardChoices from "./CardChoices";
 import classes from "./QuizGame.module.css";
+import Question from "./Question";
+import Choices from "./Choices";
 import MessageModal from "../UI/MessageModal";
 
-const NUM_QUESTIONS = 8;
+const NUM_QUESTIONS = 10;
 
 const QuizGame = ({ numPlayers }) => {
   const navigate = useNavigate();
   const [questions, setQuestions] = useState(null);
-  const [curNumber, setCurNumber] = useState(0);
+  const [count, setCount] = useState(0);
 
   const [curPlayer, setCurPlayer] = useState("A");
   const [score, setScore] = useState({ A: 0, B: 0 });
   const [chosen, setChosen] = useState(null);
   const [endMessage, setEndMessage] = useState("");
 
-  const drawChoices = (questionIndex) => {
+  const drawImageChoices = (imgIndex) => {
     // 抽四個選項
     const randomChoices = [...Array(8).keys()]
       .sort(() => Math.random() - 0.5)
       .slice(0, 4);
 
     // 其中一個換成正答
-    if (!randomChoices.includes(questionIndex)) {
+    if (!randomChoices.includes(imgIndex)) {
       const replaced = Math.floor(Math.random() * 4);
-      randomChoices[replaced] = questionIndex;
+      randomChoices[replaced] = imgIndex;
     }
 
     return randomChoices;
   };
 
   const drawQuestions = () => {
-    const randomDraw = [...Array(8).keys()]
+    const randomImageDraw = [...Array(8).keys()]
       .sort(() => Math.random() - 0.5)
-      .map((q) => ({
-        imgIndex: q,
-        choices: drawChoices(q),
+      .map((num) => ({
+        description: cardImages[num].information,
+        choices: drawImageChoices(num),
+        answer: num,
+        src: cardImages[num].src,
+        type: "image",
       }));
 
-    setQuestions(randomDraw);
+    const randomTextDraw = [...Array(4).keys()]
+      .sort(() => Math.random() - 0.5)
+      .map((num) => ({ ...textQuestions[num], type: "text" }));
+
+    const combination = randomImageDraw
+      .concat(randomTextDraw)
+      .sort(() => Math.random() - 0.5);
+
+    setQuestions(combination);
   };
 
   useEffect(() => {
     drawQuestions();
   }, []);
 
-  const choose = (imgIndex) => {
-    if (chosen) return;
-    setChosen(imgIndex);
-    if (imgIndex === questions[curNumber].imgIndex) {
+  const choose = (option) => {
+    if (chosen || chosen === 0) return; //選到資訊精靈的時候chosen會 = 0
+    setChosen(option);
+    if (option === questions[count].answer) {
       setScore((prev) => ({
         ...prev,
         [curPlayer]: prev[curPlayer] + 1,
       }));
     }
-
     setTimeout(() => {
       if (numPlayers === 2) {
         setCurPlayer((prev) => (prev == "A" ? "B" : "A"));
       }
-      setChosen(null);
-      if (curNumber + 1 === NUM_QUESTIONS) {
+      if (count + 1 === NUM_QUESTIONS) {
         setEndMessage("遊戲結束");
       } else {
-        setCurNumber((prev) => prev + 1);
+        setCount((prev) => prev + 1);
       }
-    }, [3000]);
+      setChosen(null);
+    }, [1000]);
   };
 
   const layoutPlayerA = (
@@ -97,18 +108,12 @@ const QuizGame = ({ numPlayers }) => {
           {layoutPlayerA}
           {layoutPlayerB}
         </div>
+        {questions && <Question question={questions[count]} count={count} />}
         {questions && (
-          <Question
-            imgIndex={questions[curNumber].imgIndex}
-            curNumber={curNumber}
-          />
-        )}
-        {questions && (
-          <CardChoices
-            choices={questions[curNumber].choices}
+          <Choices
+            question={questions[count]}
             onChoose={choose}
             chosen={chosen}
-            correct={questions[curNumber].imgIndex}
           />
         )}
       </div>
