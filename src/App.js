@@ -5,7 +5,8 @@ import classes from "./App.module.css";
 import HomePage from "./pages/HomePage";
 import IntroPage from "./pages/IntroPage";
 import GameIntroPage from "./pages/GameIntroPage";
-import MemoryGame from "./pages/MemoryGame";
+import MemoryPage from "./pages/MemoryPage";
+import QuizPage from "./pages/QuizPage";
 
 function App() {
   const [numCards, setNumCards] = useState(16);
@@ -27,7 +28,11 @@ function App() {
 
           <Route
             path="/memory-game"
-            element={<MemoryGame numCards={numCards} numPlayers={numPlayers} />}
+            element={<MemoryPage numCards={numCards} numPlayers={numPlayers} />}
+          />
+          <Route
+            path="quiz-game"
+            element={<QuizPage numPlayers={numPlayers} />}
           />
         </Routes>
       </div>

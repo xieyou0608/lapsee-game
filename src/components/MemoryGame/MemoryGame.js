@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import classes from "./GameBoard.module.css";
+import classes from "./MemoryGame.module.css";
 import { cardImages } from "../../assets/card-images/CardImages";
 
 import { Box } from "@mui/material";
 import Card from "./Card";
 import CardModal from "../UI/CardModal";
 import MessageModal from "../UI/MessageModal";
-import Player from "./Player";
+import Player from "../Game/Player";
+import GameContainer from "../Game/GameContainer";
 
-const GameBoard = ({ numCards, numPlayers }) => {
+const MemoryGame = ({ numCards, numPlayers }) => {
   const navigate = useNavigate();
   const [deck, setDeck] = useState([]);
   const [chosen, setChosen] = useState([]);
@@ -145,7 +146,7 @@ const GameBoard = ({ numCards, numPlayers }) => {
     ) : null;
 
   return (
-    <div className={classes.app}>
+    <GameContainer>
       {showCard && <CardModal card={showCard} onConfirm={closeCardModal} />}
       {isDone && (
         <MessageModal
@@ -178,8 +179,8 @@ const GameBoard = ({ numCards, numPlayers }) => {
         {layoutBoard}
         {layoutPlayerB}
       </Box>
-    </div>
+    </GameContainer>
   );
 };
 
-export default GameBoard;
+export default MemoryGame;

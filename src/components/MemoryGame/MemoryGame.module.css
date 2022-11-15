@@ -1,15 +1,3 @@
-.app {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  position: fixed;
-  background: #fdf3e1;
-  height: 100%;
-  width: 100%;
-}
-
 .board {
   margin: 2rem;
   display: grid;
