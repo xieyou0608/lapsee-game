@@ -1,0 +1,38 @@
+.choices {
+  width: 20vw;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  row-gap: 0vh;
+  column-gap: 0vh;
+}
+
+.choice {
+  transition: 0.5s;
+  cursor: pointer;
+  border: 1vh solid transparent;
+}
+@media (min-width: 600px) {
+  .choice:hover {
+    border-color: black;
+  }
+}
+
+.choice img {
+  width: 100%;
+}
+
+.correct,
+.correct:hover {
+  border-color: green;
+}
+.wrong,
+.wrong:hover {
+  border-color: red;
+}
+
+@media (max-width: 600px) {
+  .choices {
+    width: 70vw;
+  }
+}

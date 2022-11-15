@@ -1,0 +1,25 @@
+.question {
+  width: 30vw;
+  /* border: solid 1vw black; */
+  border-radius: 3vw;
+  background-color: rgb(183, 164, 164);
+  padding: 3vw;
+  margin-right: 3vw;
+
+  display: flex;
+  align-items: center;
+}
+@media (max-width: 600px) {
+  .question {
+    width: 80vw;
+    margin-right: 0;
+    margin-bottom: 3vh;
+  }
+}
+
+@media (min-width: 600px) {
+  .question {
+    height: 50vh;
+    font-size: 1.5vw;
+  }
+}

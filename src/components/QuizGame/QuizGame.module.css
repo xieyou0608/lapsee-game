@@ -1,0 +1,14 @@
+.quiz-game {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.players {
+  display: flex;
+  flex-direction: row;
+}
+@media (max-width: 600px) {
+  .quiz-game {
+    flex-direction: column;
+  }
+}
