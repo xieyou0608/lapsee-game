@@ -1,20 +1,58 @@
 .intro {
   border-style: solid;
   border-radius: 1rem;
-  padding: 1rem 5rem;
+  padding: 1vw 5vw;
   background: #ecd878;
-  width: 60vw;
+  width: 40vw;
+  height: 30vh;
   font-size: 1.3rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .footer {
-  text-align: center;
+  text-align: right;
   width: 100%;
+}
+
+.btn {
+  background-color: #785003;
+  color: white;
+  font-size: 2vw;
+  font-weight: bold;
+  border-radius: 10px;
+  border-style: none;
+
+  cursor: pointer;
+  transition: 0.5s;
+
+  width: 10vw;
+  height: 4vw;
+  margin: 0.5vw;
+}
+
+.btn:hover {
+  transform: scale(1.1);
+}
+
+.btn:active {
+  opacity: 0.5;
+  transform: scale(1);
 }
 
 @media (max-width: 600px) {
   .intro {
     padding: 1rem 1rem;
-    font-size: 1rem;
+    font-size: 3vh;
+    width: 80vw;
+    height: 50vh;
+  }
+  .btn {
+    width: 30vw;
+    height: 10vw;
+    font-size: 5vw;
+    margin: 1vw;
   }
 }
