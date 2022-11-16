@@ -10,17 +10,18 @@ import MessageModal from "../UI/MessageModal";
 import Player from "../Game/Player";
 import GameContainer from "../Game/GameContainer";
 import Rank from "../Game/Rank";
+import { memoryExtraScore as extra } from "../Game/ExtraScore";
 
 const MemoryGame = ({ numCards, numPlayers }) => {
   const navigate = useNavigate();
   const [deck, setDeck] = useState([]);
   const [chosen, setChosen] = useState([]);
-  const [steps, setSteps] = useState(0);
   const [pairs, setPairs] = useState(0);
   const [showCard, setShowCard] = useState(null);
 
   const [curPlayer, setCurPlayer] = useState("A");
   const [score, setScore] = useState({ A: 0, B: 0 });
+  const [combo, setCombo] = useState(0);
 
   const [endMessage, setEndMessage] = useState("");
   const nameRef = useRef();
@@ -37,7 +38,6 @@ const MemoryGame = ({ numCards, numPlayers }) => {
 
     setDeck(cards);
     setChosen([]);
-    setSteps(0);
     setPairs(0);
     setScore({ A: 0, B: 0 });
   };
@@ -62,17 +62,24 @@ const MemoryGame = ({ numCards, numPlayers }) => {
     setChosen([]);
     setPairs((prev) => prev + 1);
     setShowCard(matchedCard);
-    setScore((prev) => ({
-      ...prev,
-      [curPlayer]: prev[curPlayer] + 100,
-    }));
+    setCombo((prev) => prev + 1);
   };
+
+  useEffect(() => {
+    if (combo !== 0) {
+      setScore((prev) => ({
+        ...prev,
+        [curPlayer]: prev[curPlayer] + 100 + extra[combo],
+      }));
+    }
+  }, [combo]);
 
   const failMatch = () => {
     setChosen([]);
     if (numPlayers === 2) {
       setCurPlayer((prev) => (prev == "A" ? "B" : "A"));
     }
+    setCombo(0);
   };
 
   const closeCardModal = () => {
@@ -89,7 +96,6 @@ const MemoryGame = ({ numCards, numPlayers }) => {
         setChosen([first]);
         return;
       }
-      setSteps((prev) => prev + 1);
       if (first.mark === second.mark) {
         timer = setTimeout(() => {
           matchTwoCard(first);

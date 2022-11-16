@@ -12,6 +12,7 @@ import MessageModal from "../UI/MessageModal";
 
 import Rank from "../Game/Rank";
 import { Box } from "@mui/material";
+import { quizExtraScore as extra } from "../Game/ExtraScore";
 
 const NUM_QUESTIONS = 10;
 
@@ -22,6 +23,8 @@ const QuizGame = ({ numPlayers }) => {
 
   const [curPlayer, setCurPlayer] = useState("A");
   const [score, setScore] = useState({ A: 0, B: 0 });
+  const [combo, setCombo] = useState(0);
+
   const [chosen, setChosen] = useState(null);
   const [endMessage, setEndMessage] = useState("");
   const nameRef = useRef();
@@ -72,10 +75,9 @@ const QuizGame = ({ numPlayers }) => {
     if (chosen || chosen === 0) return; //選到資訊精靈的時候chosen會 = 0
     setChosen(option);
     if (option === questions[count].answer) {
-      setScore((prev) => ({
-        ...prev,
-        [curPlayer]: prev[curPlayer] + 100,
-      }));
+      setCombo((prev) => prev + 1);
+    } else {
+      setCombo(0);
     }
     setTimeout(() => {
       if (numPlayers === 2) {
@@ -85,6 +87,15 @@ const QuizGame = ({ numPlayers }) => {
       setChosen(null);
     }, [1000]);
   };
+
+  useEffect(() => {
+    if (combo !== 0) {
+      setScore((prev) => ({
+        ...prev,
+        [curPlayer]: prev[curPlayer] + 100 + extra[combo],
+      }));
+    }
+  }, [combo]);
 
   useEffect(() => {
     if (count === NUM_QUESTIONS) {

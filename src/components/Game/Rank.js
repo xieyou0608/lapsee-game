@@ -11,9 +11,7 @@ const Rank = ({ isDone, name, score, gameType }) => {
 
   const loadData = async () => {
     const curRank = await RankService.loadRank(gameType);
-    if (curRank) {
-      setRank(curRank.map((record, idx) => ({ ...record, place: idx })));
-    }
+    setRank(curRank.map((record, idx) => ({ ...record, place: idx })));
   };
 
   const recordNewRank = async () => {
@@ -23,7 +21,10 @@ const Rank = ({ isDone, name, score, gameType }) => {
       return;
     }
     if (!curRank) {
-      curRank = [{ name, score }];
+      // curRank = [{ name, score }];
+      // need to handler http error
+      navigate("/");
+      return;
     } else {
       let inserted = false;
       for (let i = 0; i < curRank.length; i++) {
