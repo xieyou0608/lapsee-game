@@ -133,32 +133,6 @@ const QuizGame = ({ numPlayers }) => {
 
   return (
     <GameContainer>
-      {endMessage && !isDone && numPlayers === 1 && (
-        <MessageModal
-          title="遊戲結束"
-          content={nameInput}
-          onConfirm={() => {
-            setIsDone(true);
-          }}
-        />
-      )}
-      {endMessage && !isDone && numPlayers === 2 && (
-        <MessageModal
-          title="遊戲結束"
-          content={endMessage}
-          onConfirm={() => {
-            navigate("/");
-          }}
-        />
-      )}
-      {isDone && numPlayers === 1 && (
-        <Rank
-          isDone={isDone}
-          name={nameRef.current.value}
-          score={score.A}
-          gameType={"quiz"}
-        />
-      )}
       {!(count === NUM_QUESTIONS) && (
         <React.Fragment>
           <Box
@@ -186,6 +160,32 @@ const QuizGame = ({ numPlayers }) => {
             </div>
           </Box>
         </React.Fragment>
+      )}
+      {endMessage && !isDone && numPlayers === 2 && (
+        <MessageModal
+          title="遊戲結束"
+          content={endMessage}
+          onConfirm={() => {
+            navigate("/");
+          }}
+        />
+      )}
+      {endMessage && !isDone && numPlayers === 1 && (
+        <MessageModal
+          title="遊戲結束"
+          content={nameInput}
+          onConfirm={() => {
+            setIsDone(true);
+          }}
+        />
+      )}
+      {isDone && numPlayers === 1 && (
+        <Rank
+          isDone={isDone}
+          name={nameRef.current.value}
+          score={score.A}
+          gameType={"quiz"}
+        />
       )}
     </GameContainer>
   );

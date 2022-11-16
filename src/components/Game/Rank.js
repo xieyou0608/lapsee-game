@@ -11,11 +11,17 @@ const Rank = ({ isDone, name, score, gameType }) => {
 
   const loadData = async () => {
     const curRank = await RankService.loadRank(gameType);
-    setRank(curRank.map((record, idx) => ({ ...record, place: idx })));
+    if (curRank) {
+      setRank(curRank.map((record, idx) => ({ ...record, place: idx })));
+    }
   };
 
   const recordNewRank = async () => {
     let curRank = await RankService.loadRank(gameType);
+    if (name === "") {
+      setRank(curRank.map((record, idx) => ({ ...record, place: idx })));
+      return;
+    }
     if (!curRank) {
       curRank = [{ name, score }];
     } else {

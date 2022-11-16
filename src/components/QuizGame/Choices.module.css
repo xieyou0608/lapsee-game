@@ -24,6 +24,8 @@
 
 .choice img {
   width: 100%;
+  box-shadow: 0.5vmin 0.5vmin 1vmin rgba(0, 0, 0, 0.5);
+  margin-bottom: 1vmin;
 }
 
 .text-choice {
@@ -46,6 +48,9 @@
 @media (max-width: 600px) {
   .choices {
     width: 70vw;
+  }
+  .images-grid .choice {
+    width: 35vw;
   }
 
   .choice img {

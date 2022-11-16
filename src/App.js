@@ -25,7 +25,12 @@ function App() {
             path="/intro"
             element={<IntroPage numPlayers={numPlayers} />}
           />
-          <Route path="/game-intro" element={<GameIntroPage />} />
+          <Route
+            path="/game-intro"
+            element={
+              <GameIntroPage numCards={numCards} setNumCards={setNumCards} />
+            }
+          />
 
           <Route
             path="/memory-game"

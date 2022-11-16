@@ -5,7 +5,7 @@ import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import MemoryIntro from "../components/GameIntro/MemoryIntro";
 import QuizIntro from "../components/GameIntro/QuizIntro";
 
-const GameIntroPage = () => {
+const GameIntroPage = ({ numCards, setNumCards }) => {
   const [showMemoryIntro, setShowMemoryIntro] = useState(false);
   const [showQuizIntro, setShowQuizIntro] = useState(false);
 
@@ -28,7 +28,13 @@ const GameIntroPage = () => {
 
   return (
     <React.Fragment>
-      {showMemoryIntro && <MemoryIntro onClose={closeModal} />}
+      {showMemoryIntro && (
+        <MemoryIntro
+          onClose={closeModal}
+          numCards={numCards}
+          setNumCards={setNumCards}
+        />
+      )}
       {showQuizIntro && <QuizIntro onClose={closeModal} />}
 
       <div className={classes["memory-intro"]}>
