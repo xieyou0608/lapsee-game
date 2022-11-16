@@ -1,15 +1,19 @@
 .intro {
   border-style: solid;
   border-radius: 1rem;
-  padding: 1vw 5vw;
+  padding: 1vw 2vw;
   background: #ecd878;
   width: 40vw;
-  height: 30vh;
-  font-size: 1.3rem;
+  height: 40vh;
+  font-size: 3.5vh;
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.intro p {
+  margin-bottom: 0;
 }
 
 .footer {

@@ -153,7 +153,6 @@ const MemoryGame = ({ numCards, numPlayers }) => {
 
   return (
     <GameContainer>
-      {showCard && <CardModal card={showCard} onConfirm={closeCardModal} />}
       {endMessage && !isDone && numPlayers === 1 && (
         <MessageModal
           title="過關"
@@ -212,6 +211,9 @@ const MemoryGame = ({ numCards, numPlayers }) => {
           </Box>
         </React.Fragment>
       )}
+
+      {/* Let modal be the last element to fix safari z-index error */}
+      {showCard && <CardModal card={showCard} onConfirm={closeCardModal} />}
     </GameContainer>
   );
 };
