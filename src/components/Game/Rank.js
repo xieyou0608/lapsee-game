@@ -36,7 +36,7 @@ const Rank = ({ isDone, name, score, gameType }) => {
 
   useEffect(() => {
     if (isDone) recordNewRank();
-    // if (!isDone) loadData();
+    if (!isDone) loadData();
   }, [isDone]);
 
   const gameTitle = {

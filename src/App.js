@@ -7,6 +7,7 @@ import IntroPage from "./pages/IntroPage";
 import GameIntroPage from "./pages/GameIntroPage";
 import MemoryPage from "./pages/MemoryPage";
 import QuizPage from "./pages/QuizPage";
+import Rank from "./components/Game/Rank";
 
 function App() {
   const [numCards, setNumCards] = useState(8);
@@ -33,6 +34,14 @@ function App() {
           <Route
             path="quiz-game"
             element={<QuizPage numPlayers={numPlayers} />}
+          />
+          <Route
+            path="memory-rank"
+            element={<Rank isDone={false} gameType="memory" />}
+          />
+          <Route
+            path="quiz-rank"
+            element={<Rank isDone={false} gameType="quiz" />}
           />
         </Routes>
       </div>
