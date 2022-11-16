@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   z-index: 10;
   background: rgba(0, 0, 0, 0.75);
@@ -11,9 +11,7 @@
 
 .modal {
   display: flex;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  border-radius: 20px;
+  align-items: center;
 
   position: fixed;
   top: 20vh;
@@ -28,19 +26,25 @@
   overflow: hidden;
 }
 
-.modal img {
+.cardImg {
   /* must add display block to avoid bottom space*/
   display: block;
   height: 100%;
   width: auto;
+  /* border-radius: 20px; */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
 }
 
 .cardInfo {
+  border-radius: 20px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow-y: auto;
 }
 
 .title {
@@ -59,10 +63,11 @@
   justify-content: center;
   padding: 1rem;
   padding-top: 0;
+  overflow-y: auto;
 }
 
 .action {
-  margin-bottom: 2rem;
+  margin-bottom: 3vh;
   display: flex;
   justify-content: center;
 }
@@ -87,32 +92,37 @@
   transform: scale(1);
 }
 
+@media (min-width: 768px) {
+  .cardInfo {
+    margin-left: 3vw;
+  }
+}
+
 @media (max-width: 768px) {
   .modal {
     flex-direction: column;
-    left: 15vw;
-    width: 70vw;
+    left: 10vw;
+    width: 80vw;
 
     top: 5vh;
     height: 90vh;
   }
 
-  .modal img {
-    width: 100%;
+  .cardImg {
+    width: 50vw;
     height: auto;
   }
 
+  .cardInfo {
+    margin-top: 3vh;
+  }
+
   .title {
-    background-color: white;
-    padding-top: 1rem;
-    padding-bottom: 0;
+    padding: 1.5vh;
   }
 
   .title h2 {
-    margin: 0;
-    color: black;
-    font-size: 1rem;
-    text-align: start;
+    font-size: 3vh;
   }
 }
 

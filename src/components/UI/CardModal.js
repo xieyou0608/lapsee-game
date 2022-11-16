@@ -9,7 +9,7 @@ const CardModal = (props) => {
     <React.Fragment>
       <div className={classes["backdrop"]} onClick={onConfirm} />
       <div className={classes["modal"]}>
-        <img src={cardSrc} alt={card.name} />
+        <img className={classes["cardImg"]} src={cardSrc} alt={card.name} />
         <div className={classes["cardInfo"]}>
           <header className={classes["title"]}>
             <h2>{card.name}</h2>
