@@ -53,7 +53,7 @@ const QuizGame = ({ numPlayers }) => {
         type: "image",
       }));
 
-    const randomTextDraw = [...Array(4).keys()]
+    const randomTextDraw = [...Array(19).keys()]
       .sort(() => Math.random() - 0.5)
       .map((num) => ({ ...textQuestions[num], type: "text" }));
 
