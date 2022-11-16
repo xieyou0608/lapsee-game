@@ -80,20 +80,22 @@ const QuizGame = ({ numPlayers }) => {
       if (numPlayers === 2) {
         setCurPlayer((prev) => (prev == "A" ? "B" : "A"));
       }
-      if (count + 1 === NUM_QUESTIONS) {
-        if (numPlayers === 2) {
-          if (score.A > score.B) setEndMessage("玩家 A 贏了！");
-          else if (score.A < score.B) setEndMessage("玩家 B 贏了！");
-          else setEndMessage("平手!");
-        } else {
-          setEndMessage("你得了" + score.A + "分");
-        }
-      } else {
-        setCount((prev) => prev + 1);
-      }
+      setCount((prev) => prev + 1);
       setChosen(null);
     }, [1000]);
   };
+
+  useEffect(() => {
+    if (count === NUM_QUESTIONS) {
+      if (numPlayers === 2) {
+        if (score.A > score.B) setEndMessage("玩家 A 贏了！");
+        else if (score.A < score.B) setEndMessage("玩家 B 贏了！");
+        else setEndMessage("平手!");
+      } else {
+        setEndMessage("你得了" + score.A + "分");
+      }
+    }
+  }, [count, score]);
 
   const layoutPlayerA = (
     <Player score={score.A} player="A" isMyTurn={curPlayer === "A"} />
@@ -139,20 +141,22 @@ const QuizGame = ({ numPlayers }) => {
           gameType={"quiz"}
         />
       )}
-      <div className={classes["quiz-game"]}>
-        <div className={classes["players"]}>
-          {layoutPlayerA}
-          {layoutPlayerB}
+      {!(count === NUM_QUESTIONS) && (
+        <div className={classes["quiz-game"]}>
+          <div className={classes["players"]}>
+            {layoutPlayerA}
+            {layoutPlayerB}
+          </div>
+          {questions && <Question question={questions[count]} count={count} />}
+          {questions && (
+            <Choices
+              question={questions[count]}
+              onChoose={choose}
+              chosen={chosen}
+            />
+          )}
         </div>
-        {questions && <Question question={questions[count]} count={count} />}
-        {questions && (
-          <Choices
-            question={questions[count]}
-            onChoose={choose}
-            chosen={chosen}
-          />
-        )}
-      </div>
+      )}
     </GameContainer>
   );
 };
