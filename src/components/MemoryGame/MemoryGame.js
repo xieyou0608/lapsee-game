@@ -115,8 +115,8 @@ const MemoryGame = ({ numCards, numPlayers }) => {
   useEffect(() => {
     if (pairs === numCards / 2 && !showCard) {
       if (numPlayers === 2) {
-        if (score.A > score.B) setEndMessage("玩家 A 贏了！");
-        else if (score.A < score.B) setEndMessage("玩家 B 贏了！");
+        if (score.A > score.B) setEndMessage("萊西贏了！");
+        else if (score.A < score.B) setEndMessage("剖西贏了！");
         else setEndMessage("平手!");
       } else {
         setEndMessage("恭喜你成功配對所有卡片！");

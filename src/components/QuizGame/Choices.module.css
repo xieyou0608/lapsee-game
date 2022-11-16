@@ -36,15 +36,6 @@
   width: 20vw;
 }
 
-.correct,
-.correct:hover {
-  border-color: green;
-}
-.wrong,
-.wrong:hover {
-  border-color: red;
-}
-
 @media (max-width: 600px) {
   .choices {
     width: 70vw;
@@ -74,4 +65,13 @@
   .images-grid {
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
+}
+
+.correct,
+.correct:hover {
+  border-color: green;
+}
+.wrong,
+.wrong:hover {
+  border-color: red;
 }
