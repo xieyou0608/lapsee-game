@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { cardImages } from "../../assets/card-images/CardImages";
 import { textQuestions } from "./TextQuestions";
@@ -9,6 +9,8 @@ import classes from "./QuizGame.module.css";
 import Question from "./Question";
 import Choices from "./Choices";
 import MessageModal from "../UI/MessageModal";
+
+import Rank from "../Game/Rank";
 
 const NUM_QUESTIONS = 10;
 
@@ -21,6 +23,8 @@ const QuizGame = ({ numPlayers }) => {
   const [score, setScore] = useState({ A: 0, B: 0 });
   const [chosen, setChosen] = useState(null);
   const [endMessage, setEndMessage] = useState("");
+  const nameRef = useRef();
+  const [isDone, setIsDone] = useState(false);
 
   const drawImageChoices = (imgIndex) => {
     // 抽四個選項
@@ -69,7 +73,7 @@ const QuizGame = ({ numPlayers }) => {
     if (option === questions[count].answer) {
       setScore((prev) => ({
         ...prev,
-        [curPlayer]: prev[curPlayer] + 1,
+        [curPlayer]: prev[curPlayer] + 100,
       }));
     }
     setTimeout(() => {
@@ -77,7 +81,13 @@ const QuizGame = ({ numPlayers }) => {
         setCurPlayer((prev) => (prev == "A" ? "B" : "A"));
       }
       if (count + 1 === NUM_QUESTIONS) {
-        setEndMessage("遊戲結束");
+        if (numPlayers === 2) {
+          if (score.A > score.B) setEndMessage("玩家 A 贏了！");
+          else if (score.A < score.B) setEndMessage("玩家 B 贏了！");
+          else setEndMessage("平手!");
+        } else {
+          setEndMessage("你得了" + score.A + "分");
+        }
       } else {
         setCount((prev) => prev + 1);
       }
@@ -94,14 +104,40 @@ const QuizGame = ({ numPlayers }) => {
       <Player score={score.B} player="B" isMyTurn={curPlayer === "B"} />
     ) : null;
 
-  const goToHome = () => {
-    navigate("/");
-  };
+  const nameInput = (
+    <div>
+      <p>{endMessage}</p>
+      <label htmlFor="">你的名字</label> <input type="text" ref={nameRef} />
+    </div>
+  );
 
   return (
     <GameContainer>
-      {endMessage && (
-        <MessageModal title="結束" content={endMessage} onConfirm={goToHome} />
+      {endMessage && !isDone && numPlayers === 1 && (
+        <MessageModal
+          title="遊戲結束"
+          content={nameInput}
+          onConfirm={() => {
+            setIsDone(true);
+          }}
+        />
+      )}
+      {endMessage && !isDone && numPlayers === 2 && (
+        <MessageModal
+          title="遊戲結束"
+          content={endMessage}
+          onConfirm={() => {
+            navigate("/");
+          }}
+        />
+      )}
+      {isDone && numPlayers === 1 && (
+        <Rank
+          isDone={isDone}
+          name={nameRef.current.value}
+          score={score.A}
+          gameType={"quiz"}
+        />
       )}
       <div className={classes["quiz-game"]}>
         <div className={classes["players"]}>

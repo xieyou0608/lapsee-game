@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import classes from "./MemoryGame.module.css";
 import { cardImages } from "../../assets/card-images/CardImages";
@@ -9,6 +9,7 @@ import CardModal from "../UI/CardModal";
 import MessageModal from "../UI/MessageModal";
 import Player from "../Game/Player";
 import GameContainer from "../Game/GameContainer";
+import Rank from "../Game/Rank";
 
 const MemoryGame = ({ numCards, numPlayers }) => {
   const navigate = useNavigate();
@@ -17,11 +18,13 @@ const MemoryGame = ({ numCards, numPlayers }) => {
   const [steps, setSteps] = useState(0);
   const [pairs, setPairs] = useState(0);
   const [showCard, setShowCard] = useState(null);
-  const [isDone, setIsDone] = useState(false);
 
   const [curPlayer, setCurPlayer] = useState("A");
   const [score, setScore] = useState({ A: 0, B: 0 });
-  const [endMessage, setEndMessage] = useState("恭喜你成功配對所有卡片！");
+
+  const [endMessage, setEndMessage] = useState("");
+  const nameRef = useRef();
+  const [isDone, setIsDone] = useState(false);
 
   const shuffleCards = () => {
     const slicedImgs = cardImages.slice(0, numCards / 2);
@@ -61,7 +64,7 @@ const MemoryGame = ({ numCards, numPlayers }) => {
     setShowCard(matchedCard);
     setScore((prev) => ({
       ...prev,
-      [curPlayer]: prev[curPlayer] + 1,
+      [curPlayer]: prev[curPlayer] + 100,
     }));
   };
 
@@ -74,11 +77,6 @@ const MemoryGame = ({ numCards, numPlayers }) => {
 
   const closeCardModal = () => {
     setShowCard(null);
-  };
-
-  const finishGame = () => {
-    setIsDone(false);
-    navigate("/");
   };
 
   useEffect(shuffleCards, []);
@@ -117,10 +115,11 @@ const MemoryGame = ({ numCards, numPlayers }) => {
           else prev = "平手!";
           return prev;
         });
+      } else {
+        setEndMessage("恭喜你成功配對所有卡片！");
       }
-      setIsDone(true);
     }
-  }, [pairs, showCard, score, numPlayers]);
+  }, [pairs, showCard, score]);
 
   const boardSytle = classes.board + " " + classes[`board${numCards}`];
   const layoutBoard = (
@@ -145,40 +144,74 @@ const MemoryGame = ({ numCards, numPlayers }) => {
       <Player score={score.B} player="B" isMyTurn={curPlayer == "B"} />
     ) : null;
 
+  const nameInput = (
+    <div>
+      <p>{endMessage}</p>
+      <label htmlFor="">你的名字</label> <input type="text" ref={nameRef} />
+    </div>
+  );
+
   return (
     <GameContainer>
       {showCard && <CardModal card={showCard} onConfirm={closeCardModal} />}
-      {isDone && (
+      {endMessage && !isDone && numPlayers === 1 && (
         <MessageModal
           title="過關"
+          content={nameInput}
+          onConfirm={() => {
+            setIsDone(true);
+          }}
+        />
+      )}
+      {endMessage && !isDone && numPlayers === 2 && (
+        <MessageModal
+          title="遊戲結束"
           content={endMessage}
-          onConfirm={finishGame}
+          onConfirm={() => {
+            navigate("/");
+          }}
+        />
+      )}
+      {isDone && numPlayers === 1 && (
+        <Rank
+          isDone={isDone}
+          name={nameRef.current.value}
+          score={score.A}
+          gameType={"memory"}
         />
       )}
 
-      {/* mobile */}
-      <Box
-        sx={{ display: { xs: "flex", sm: "none", flexDirection: "column" } }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-evenly",
-          }}
-        >
-          {layoutPlayerA}
-          {layoutPlayerB}
-        </Box>
-        {layoutBoard}
-      </Box>
+      {!isDone && (
+        <React.Fragment>
+          {/* mobile */}
+          <Box
+            sx={{
+              display: { xs: "flex", sm: "none", flexDirection: "column" },
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+              }}
+            >
+              {layoutPlayerA}
+              {layoutPlayerB}
+            </Box>
+            {layoutBoard}
+          </Box>
 
-      {/* PC */}
-      <Box sx={{ display: { xs: "none", sm: "flex" }, alignItems: "center" }}>
-        {layoutPlayerA}
-        {layoutBoard}
-        {layoutPlayerB}
-      </Box>
+          {/* PC */}
+          <Box
+            sx={{ display: { xs: "none", sm: "flex" }, alignItems: "center" }}
+          >
+            {layoutPlayerA}
+            {layoutBoard}
+            {layoutPlayerB}
+          </Box>
+        </React.Fragment>
+      )}
     </GameContainer>
   );
 };

@@ -9,7 +9,7 @@ import MemoryPage from "./pages/MemoryPage";
 import QuizPage from "./pages/QuizPage";
 
 function App() {
-  const [numCards, setNumCards] = useState(16);
+  const [numCards, setNumCards] = useState(8);
   const [numPlayers, setNumPlayers] = useState(1);
 
   return (

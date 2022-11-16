@@ -6,9 +6,7 @@ const MessageModal = (props) => {
   const { title, content, onConfirm } = props;
   return (
     <ModalContainer onClose={onConfirm} title={title}>
-      <div className={classes["content"]}>
-        <p>{content}</p>
-      </div>
+      <div className={classes["content"]}>{content}</div>
       <footer className={classes["action"]}>
         <button className={classes["confirm-btn"]} onClick={onConfirm}>
           OK
