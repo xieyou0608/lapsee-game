@@ -133,12 +133,16 @@ const MemoryGame = ({ numCards, numPlayers }) => {
   );
 
   const layoutPlayerA = (
-    <Player score={score.A} player="A" isMyTurn={curPlayer == "A"} />
+    <Player
+      score={score.A}
+      playerName="萊西"
+      isMyTurn={numPlayers === 2 && curPlayer == "A"}
+    />
   );
 
   const layoutPlayerB =
     numPlayers == 2 ? (
-      <Player score={score.B} player="B" isMyTurn={curPlayer == "B"} />
+      <Player score={score.B} playerName="剖西" isMyTurn={curPlayer == "B"} />
     ) : null;
 
   const nameInput = (

@@ -4,27 +4,50 @@ import { Box, Chip } from "@mui/material";
 import playerA from "../../assets/images/LAPSEE-角色-2.png";
 import playerB from "../../assets/images/LAPSEE-角色-1.png";
 
-const Player = ({ score, player, isMyTurn }) => {
+const Player = ({ score, playerName, isMyTurn }) => {
   const playerStyle = `${classes["player-name"]} ${
     isMyTurn ? classes.playing : ""
   }`;
-  const playerSrc = player === "A" ? playerA : playerB;
+  const playerSrc = playerName === "萊西" ? playerA : playerB;
 
   return (
-    <Box
-      sx={{
-        height: { xs: "15vh", sm: "50vh" },
-        marginTop: 3,
-        marginBottom: 7,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <div className={playerStyle}>玩家{player}</div>
-      <img className={classes["player-img"]} src={playerSrc} alt={player} />
-      <div className={classes.score}>{score}</div>
-    </Box>
+    <React.Fragment>
+      <Box
+        sx={{
+          height: "50vh",
+          display: { xs: "none", sm: "flex" },
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <div className={playerStyle}>{playerName}</div>
+        <img
+          className={classes["player-img"]}
+          src={playerSrc}
+          alt={playerName}
+        />
+        <div className={classes.score}>{score}</div>
+      </Box>
+      <Box
+        sx={{
+          height: "15vh",
+          width: "40vw",
+          display: { xs: "flex", sm: "none" },
+          flexDirection: "row",
+          alignItems: "center",
+        }}
+      >
+        <img
+          className={classes["player-img"]}
+          src={playerSrc}
+          alt={playerName}
+        />
+        <div style={{ width: "100%" }}>
+          <div className={playerStyle}>{playerName}</div>
+          <div className={classes.score}>{score}</div>
+        </div>
+      </Box>
+    </React.Fragment>
   );
 };
 

@@ -4,7 +4,8 @@
   border-radius: 3vw;
   background-color: rgb(183, 164, 164);
   padding: 3vw;
-  margin-right: 3vw;
+  margin: auto 2vw;
+  margin-bottom: 3vh;
 
   display: flex;
   align-items: center;
@@ -13,13 +14,12 @@
   .question {
     width: 80vw;
     margin-right: 0;
-    margin-bottom: 3vh;
   }
 }
 
 @media (min-width: 600px) {
   .question {
-    height: 50vh;
+    width: 40vw;
     font-size: 1.5vw;
   }
 }

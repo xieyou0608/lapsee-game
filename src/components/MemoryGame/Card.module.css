@@ -11,6 +11,7 @@
   display: block;
   height: 100%;
   width: auto;
+  box-shadow: 0.5vmin 0.5vmin 1vmin rgba(0, 0, 0, 0.5);
 }
 
 .card .front {

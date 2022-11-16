@@ -10,7 +10,7 @@ import QuizPage from "./pages/QuizPage";
 import Rank from "./components/Game/Rank";
 
 function App() {
-  const [numCards, setNumCards] = useState(8);
+  const [numCards, setNumCards] = useState(16);
   const [numPlayers, setNumPlayers] = useState(1);
 
   return (

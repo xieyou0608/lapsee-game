@@ -31,6 +31,7 @@
   color: white;
   padding: 1vh;
   border-radius: 1vh;
+  width: 20vw;
 }
 
 .correct,
@@ -50,10 +51,22 @@
   .choice img {
     width: 60%;
   }
+
+  .text-choice {
+    width: 50vw;
+  }
 }
 
 @media (min-width: 600px) {
   .choice:hover {
     border-color: black;
+  }
+
+  .choices {
+    width: 40vw;
+  }
+
+  .images-grid {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 }

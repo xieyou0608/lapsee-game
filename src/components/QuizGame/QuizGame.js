@@ -11,6 +11,7 @@ import Choices from "./Choices";
 import MessageModal from "../UI/MessageModal";
 
 import Rank from "../Game/Rank";
+import { Box } from "@mui/material";
 
 const NUM_QUESTIONS = 10;
 
@@ -98,18 +99,35 @@ const QuizGame = ({ numPlayers }) => {
   }, [count, score]);
 
   const layoutPlayerA = (
-    <Player score={score.A} player="A" isMyTurn={curPlayer === "A"} />
+    <Player
+      score={score.A}
+      playerName="萊西"
+      isMyTurn={numPlayers === 2 && curPlayer === "A"}
+    />
   );
 
   const layoutPlayerB =
     numPlayers == 2 ? (
-      <Player score={score.B} player="B" isMyTurn={curPlayer === "B"} />
+      <Player score={score.B} playerName="剖西" isMyTurn={curPlayer === "B"} />
     ) : null;
 
   const nameInput = (
     <div>
       <p>{endMessage}</p>
       <label htmlFor="">你的名字</label> <input type="text" ref={nameRef} />
+    </div>
+  );
+
+  const quizArea = (
+    <div className={classes["quiz-area"]}>
+      {questions && <Question question={questions[count]} count={count} />}
+      {questions && (
+        <Choices
+          question={questions[count]}
+          onChoose={choose}
+          chosen={chosen}
+        />
+      )}
     </div>
   );
 
@@ -142,20 +160,32 @@ const QuizGame = ({ numPlayers }) => {
         />
       )}
       {!(count === NUM_QUESTIONS) && (
-        <div className={classes["quiz-game"]}>
-          <div className={classes["players"]}>
-            {layoutPlayerA}
-            {layoutPlayerB}
-          </div>
-          {questions && <Question question={questions[count]} count={count} />}
-          {questions && (
-            <Choices
-              question={questions[count]}
-              onChoose={choose}
-              chosen={chosen}
-            />
-          )}
-        </div>
+        <React.Fragment>
+          <Box
+            sx={{
+              display: { xs: "flex", sm: "none" },
+            }}
+          >
+            <div className={classes["quiz-game"]}>
+              <div className={classes["players"]}>
+                {layoutPlayerA}
+                {layoutPlayerB}
+              </div>
+              {quizArea}
+            </div>
+          </Box>
+          <Box
+            sx={{
+              display: { xs: "none", sm: "flex" },
+            }}
+          >
+            <div className={classes["quiz-game"]}>
+              {layoutPlayerA}
+              {quizArea}
+              {layoutPlayerB}
+            </div>
+          </Box>
+        </React.Fragment>
       )}
     </GameContainer>
   );
