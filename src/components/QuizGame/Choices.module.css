@@ -38,7 +38,7 @@
 
 @media (max-width: 600px) {
   .choices {
-    width: 70vw;
+    width: 80vw;
   }
   .images-grid .choice {
     width: 35vw;
