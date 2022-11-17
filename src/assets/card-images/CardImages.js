@@ -7,6 +7,8 @@ import card6 from "./網際網路村長.PNG";
 import card7 from "./廣播村長雙胞胎.PNG";
 import card8 from "./雜誌.PNG";
 import backImage from "./card-back.png";
+import winImageA from "./資訊精靈（贏）.PNG";
+import winImageB from "./假資訊精靈（贏）.PNG";
 
 const cardImages = [
   {
@@ -67,4 +69,4 @@ const cardImages = [
   },
 ];
 
-export { cardImages, backImage };
+export { cardImages, backImage, winImageA, winImageB };

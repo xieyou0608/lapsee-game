@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { cardImages } from "../../assets/card-images/CardImages";
+import {
+  cardImages,
+  winImageA,
+  winImageB,
+} from "../../assets/card-images/CardImages";
 import { textQuestions } from "./TextQuestions";
 import GameContainer from "../Game/GameContainer";
 import Player from "../Game/Player";
@@ -123,9 +127,18 @@ const QuizGame = ({ numPlayers }) => {
     ) : null;
 
   const nameInput = (
-    <div>
+    <div className={classes["single-ending"]}>
+      <img src={winImageA} alt="" />
       <p>{endMessage}</p>
       <label htmlFor="">你的名字</label> <input type="text" ref={nameRef} />
+    </div>
+  );
+
+  const pkEnding = (
+    <div className={classes["pk-ending"]}>
+      {endMessage === "萊西贏了！" && <img src={winImageA} alt="" />}
+      {endMessage === "剖西贏了！" && <img src={winImageB} alt="" />}
+      <p>{endMessage}</p>
     </div>
   );
 
@@ -175,7 +188,7 @@ const QuizGame = ({ numPlayers }) => {
       {endMessage && !isDone && numPlayers === 2 && (
         <MessageModal
           title="遊戲結束"
-          content={endMessage}
+          content={pkEnding}
           onConfirm={() => {
             navigate("/");
           }}

@@ -1,7 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import classes from "./MemoryGame.module.css";
-import { cardImages } from "../../assets/card-images/CardImages";
+import {
+  cardImages,
+  winImageA,
+  winImageB,
+} from "../../assets/card-images/CardImages";
 
 import { Box } from "@mui/material";
 import Card from "./Card";
@@ -152,9 +156,18 @@ const MemoryGame = ({ numCards, numPlayers }) => {
     ) : null;
 
   const nameInput = (
-    <div>
+    <div className={classes["single-ending"]}>
+      <img src={winImageA} alt="" />
       <p>{endMessage}</p>
       <label htmlFor="">你的名字</label> <input type="text" ref={nameRef} />
+    </div>
+  );
+
+  const pkEnding = (
+    <div className={classes["pk-ending"]}>
+      {endMessage === "萊西贏了！" && <img src={winImageA} alt="" />}
+      {endMessage === "剖西贏了！" && <img src={winImageB} alt="" />}
+      <p>{endMessage}</p>
     </div>
   );
 
@@ -172,7 +185,7 @@ const MemoryGame = ({ numCards, numPlayers }) => {
       {endMessage && !isDone && numPlayers === 2 && (
         <MessageModal
           title="遊戲結束"
-          content={endMessage}
+          content={pkEnding}
           onConfirm={() => {
             navigate("/");
           }}
