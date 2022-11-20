@@ -33,8 +33,8 @@ const Rank = ({ isDone, name, score, gameType }) => {
           inserted = true;
           break;
         }
-        if (!inserted && curRank.length < 10) curRank.push({ name, score });
       }
+      if (!inserted && curRank.length < 10) curRank.push({ name, score });
     }
     curRank = curRank.slice(0, 10);
     const putResponse = await RankService.updateRank(curRank, gameType);
@@ -43,8 +43,8 @@ const Rank = ({ isDone, name, score, gameType }) => {
 
   useEffect(() => {
     if (isDone) recordNewRank();
-    if (!isDone) loadData();
-  }, [isDone]);
+    else loadData();
+  }, [isDone, score]);
 
   const gameTitle = {
     memory: "媒體對對碰",

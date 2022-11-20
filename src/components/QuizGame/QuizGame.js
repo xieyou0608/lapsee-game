@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   cardImages,
@@ -15,7 +15,7 @@ import Choices from "./Choices";
 import MessageModal from "../UI/MessageModal";
 
 import Rank from "../Game/Rank";
-import { Box } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import { quizExtraScore as extra } from "../Game/ExtraScore";
 
 const NUM_QUESTIONS = 10;
@@ -31,7 +31,6 @@ const QuizGame = ({ numPlayers }) => {
 
   const [chosen, setChosen] = useState(null);
   const [endMessage, setEndMessage] = useState("");
-  const nameRef = useRef();
   const [isDone, setIsDone] = useState(false);
 
   const drawImageChoices = (imgIndex) => {
@@ -126,11 +125,27 @@ const QuizGame = ({ numPlayers }) => {
       <Player score={score.B} playerName="剖西" isMyTurn={curPlayer === "B"} />
     ) : null;
 
+  const handleChangeName = (e) => {
+    setIsValidName(true);
+    setInputName(e.target.value);
+    if (e.target.value.trim().length > 10) setIsValidName(false);
+  };
+
+  const [inputName, setInputName] = useState("");
+  const [isValidName, setIsValidName] = useState(true);
   const nameInput = (
     <div className={classes["single-ending"]}>
       <img src={winImageA} alt="" />
       <p>{endMessage}</p>
-      <label htmlFor="">你的名字</label> <input type="text" ref={nameRef} />
+      <TextField
+        type="text"
+        label="你的暱稱"
+        color="secondary"
+        onChange={handleChangeName}
+        value={inputName}
+        error={!isValidName}
+        helperText={!isValidName ? "長度上限為10個字" : null}
+      />
     </div>
   );
 
@@ -206,7 +221,7 @@ const QuizGame = ({ numPlayers }) => {
       {isDone && numPlayers === 1 && (
         <Rank
           isDone={isDone}
-          name={nameRef.current.value}
+          name={inputName}
           score={score.A}
           gameType={"quiz"}
         />

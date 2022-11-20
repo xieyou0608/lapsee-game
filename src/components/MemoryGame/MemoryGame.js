@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import classes from "./MemoryGame.module.css";
 import {
@@ -7,7 +7,7 @@ import {
   winImageB,
 } from "../../assets/card-images/CardImages";
 
-import { Box } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import Card from "./Card";
 import CardModal from "../UI/CardModal";
 import MessageModal from "../UI/MessageModal";
@@ -28,7 +28,7 @@ const MemoryGame = ({ numCards, numPlayers }) => {
   const [combo, setCombo] = useState(0);
 
   const [endMessage, setEndMessage] = useState("");
-  const nameRef = useRef();
+  const [inputName, setInputName] = useState("");
   const [isDone, setIsDone] = useState(false);
 
   const shuffleCards = () => {
@@ -155,11 +155,26 @@ const MemoryGame = ({ numCards, numPlayers }) => {
       <Player score={score.B} playerName="剖西" isMyTurn={curPlayer == "B"} />
     ) : null;
 
+  const [isValidName, setIsValidName] = useState(true);
+  const handleChangeName = (e) => {
+    setIsValidName(true);
+    setInputName(e.target.value);
+    if (e.target.value.trim().length > 10) setIsValidName(false);
+  };
+
   const nameInput = (
     <div className={classes["single-ending"]}>
       <img src={winImageA} alt="" />
       <p>{endMessage}</p>
-      <label htmlFor="">你的名字</label> <input type="text" ref={nameRef} />
+      <TextField
+        type="text"
+        label="你的暱稱"
+        color="secondary"
+        onChange={handleChangeName}
+        value={inputName}
+        error={!isValidName}
+        helperText={!isValidName ? "長度上限為10個字" : null}
+      />
     </div>
   );
 
@@ -178,7 +193,9 @@ const MemoryGame = ({ numCards, numPlayers }) => {
           title="過關"
           content={nameInput}
           onConfirm={() => {
-            setIsDone(true);
+            if (isValidName) {
+              setIsDone(true);
+            }
           }}
         />
       )}
@@ -194,7 +211,7 @@ const MemoryGame = ({ numCards, numPlayers }) => {
       {isDone && numPlayers === 1 && (
         <Rank
           isDone={isDone}
-          name={nameRef.current.value}
+          name={inputName}
           score={score.A}
           gameType={"memory"}
         />
