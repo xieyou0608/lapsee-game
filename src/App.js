@@ -19,14 +19,8 @@ function App() {
           <Route path="/game-intro" element={<GameIntroPage />} />
           <Route path="/memory-game" element={<MemoryPage />} />
           <Route path="quiz-game" element={<QuizPage />} />
-          <Route
-            path="memory-rank"
-            element={<Rank isDone={false} gameType="memory" />}
-          />
-          <Route
-            path="quiz-rank"
-            element={<Rank isDone={false} gameType="quiz" />}
-          />
+          <Route path="memory-rank" element={<Rank gameType="memory" />} />
+          <Route path="quiz-rank" element={<Rank gameType="quiz" />} />
         </Routes>
       </div>
     </BrowserRouter>

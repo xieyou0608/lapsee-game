@@ -2,24 +2,23 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { gameActions } from "../../store/game-slice";
 
-import { cardImages } from "../../assets/card-images/CardImages";
-import { textQuestions } from "./TextQuestions";
+import classes from "./QuizGame.module.css";
+import { Box } from "@mui/material";
+
 import GameContainer from "../Game/GameContainer";
 import Player from "../Game/Player";
-
-import classes from "./QuizGame.module.css";
 import Question from "./Question";
 import Choices from "./Choices";
-
-import Rank from "../Game/Rank";
-import { Box } from "@mui/material";
-import { quizExtraScore as extra } from "../Game/ExtraScore";
 import EndingModal from "../Game/EndingModal";
+import { cardImages } from "../../assets/card-images/CardImages";
+import { textQuestions } from "./TextQuestions";
+import { quizExtraScore as extra } from "../Game/ExtraScore";
 
 const NUM_QUESTIONS = 10;
 
 const QuizGame = () => {
   const dispatch = useDispatch();
+
   const numPlayers = useSelector((state) => state.game.numPlayers);
   const curPlayer = useSelector((state) => state.game.curPlayer);
 
@@ -31,7 +30,6 @@ const QuizGame = () => {
 
   const [chosen, setChosen] = useState(null);
   const [endMessage, setEndMessage] = useState("");
-  const [isDone, setIsDone] = useState(false);
 
   const drawImageChoices = (imgIndex) => {
     // 抽四個選項
@@ -116,8 +114,6 @@ const QuizGame = () => {
   const layoutPlayerB =
     numPlayers == 2 ? <Player role="B" myScore={score.B} /> : null;
 
-  const [inputName, setInputName] = useState("");
-
   const quizArea = (
     <div className={classes["quiz-area"]}>
       {questions && <Question question={questions[count]} count={count} />}
@@ -161,21 +157,8 @@ const QuizGame = () => {
           </Box>
         </React.Fragment>
       )}
-      {endMessage && !isDone && (
-        <EndingModal
-          endMessage={endMessage}
-          setIsDone={setIsDone}
-          inputName={inputName}
-          setInputName={setInputName}
-        />
-      )}
-      {isDone && numPlayers === 1 && (
-        <Rank
-          isDone={isDone}
-          name={inputName}
-          score={score.A}
-          gameType={"quiz"}
-        />
+      {endMessage && (
+        <EndingModal endMessage={endMessage} score={score.A} gameType="quiz" />
       )}
     </GameContainer>
   );

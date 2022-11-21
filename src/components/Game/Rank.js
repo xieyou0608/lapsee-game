@@ -5,7 +5,7 @@ import classes from "./Rank.module.css";
 import StartButton from "../UI/StartButton";
 import { useNavigate } from "react-router-dom";
 
-const Rank = ({ isDone, name, score, gameType }) => {
+const Rank = ({ gameType }) => {
   const [rank, setRank] = useState(null);
   const navigate = useNavigate();
 
@@ -14,37 +14,9 @@ const Rank = ({ isDone, name, score, gameType }) => {
     setRank(curRank.map((record, idx) => ({ ...record, place: idx })));
   };
 
-  const recordNewRank = async () => {
-    let curRank = await RankService.loadRank(gameType);
-    if (name === "") {
-      setRank(curRank.map((record, idx) => ({ ...record, place: idx })));
-      return;
-    }
-    if (!curRank) {
-      // curRank = [{ name, score }];
-      // need to handler http error
-      navigate("/");
-      return;
-    } else {
-      let inserted = false;
-      for (let i = 0; i < curRank.length; i++) {
-        if (score >= curRank[i].score) {
-          curRank.splice(i, 0, { name, score });
-          inserted = true;
-          break;
-        }
-      }
-      if (!inserted && curRank.length < 10) curRank.push({ name, score });
-    }
-    curRank = curRank.slice(0, 10);
-    const putResponse = await RankService.updateRank(curRank, gameType);
-    setRank(curRank.map((record, idx) => ({ ...record, place: idx })));
-  };
-
   useEffect(() => {
-    if (isDone) recordNewRank();
-    else loadData();
-  }, [isDone, score]);
+    loadData();
+  }, []);
 
   const gameTitle = {
     memory: "媒體對對碰",

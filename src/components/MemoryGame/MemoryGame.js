@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { gameActions } from "../../store/game-slice";
 
 import classes from "./MemoryGame.module.css";
-import { cardImages } from "../../assets/card-images/CardImages";
 import { Box } from "@mui/material";
+
+import GameContainer from "../Game/GameContainer";
+import Player from "../Game/Player";
 import Card from "./Card";
 import CardModal from "../UI/CardModal";
-import Player from "../Game/Player";
-import GameContainer from "../Game/GameContainer";
-import Rank from "../Game/Rank";
-import { memoryExtraScore as extra } from "../Game/ExtraScore";
 import EndingModal from "../Game/EndingModal";
+import { cardImages } from "../../assets/card-images/CardImages";
+import { memoryExtraScore as extra } from "../Game/ExtraScore";
 
 const MemoryGame = () => {
   const dispatch = useDispatch();
@@ -29,8 +29,6 @@ const MemoryGame = () => {
   const [combo, setCombo] = useState(0);
 
   const [endMessage, setEndMessage] = useState("");
-  const [inputName, setInputName] = useState("");
-  const [isDone, setIsDone] = useState(false);
 
   const shuffleCards = () => {
     const slicedImgs = cardImages.slice(0, numCards / 2);
@@ -149,7 +147,7 @@ const MemoryGame = () => {
 
   return (
     <GameContainer>
-      {!isDone && (
+      {!endMessage && (
         <React.Fragment>
           {/* mobile */}
           <Box
@@ -183,20 +181,11 @@ const MemoryGame = () => {
 
       {/* Let modal be the last element to fix safari z-index error */}
       {showCard && <CardModal card={showCard} onConfirm={closeCardModal} />}
-      {endMessage && !isDone && (
+      {endMessage && (
         <EndingModal
           endMessage={endMessage}
-          setIsDone={setIsDone}
-          inputName={inputName}
-          setInputName={setInputName}
-        />
-      )}
-      {isDone && numPlayers === 1 && (
-        <Rank
-          isDone={isDone}
-          name={inputName}
           score={score.A}
-          gameType={"memory"}
+          gameType="memory"
         />
       )}
     </GameContainer>
