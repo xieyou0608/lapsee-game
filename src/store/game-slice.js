@@ -6,11 +6,12 @@ const gameSlice = createSlice({
     numPlayers: 1,
     // score: { A: 0, B: 0 },
     curPlayer: "A",
-    name: "",
+    inputName: "",
   },
   reducers: {
     setNumPlayers(state, action) {
       state.numPlayers = action.payload;
+      state.curPlayer = "A";
     },
     changePlayer(state) {
       state.curPlayer = state.curPlayer === "A" ? "B" : "A";

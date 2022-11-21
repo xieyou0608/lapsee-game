@@ -1,27 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-
 import { gameActions } from "../../store/game-slice";
 
 import classes from "./MemoryGame.module.css";
-import {
-  cardImages,
-  winImageA,
-  winImageB,
-} from "../../assets/card-images/CardImages";
-import { Box, TextField } from "@mui/material";
+import { cardImages } from "../../assets/card-images/CardImages";
+import { Box } from "@mui/material";
 import Card from "./Card";
 import CardModal from "../UI/CardModal";
-import MessageModal from "../UI/MessageModal";
 import Player from "../Game/Player";
 import GameContainer from "../Game/GameContainer";
 import Rank from "../Game/Rank";
 import { memoryExtraScore as extra } from "../Game/ExtraScore";
+import EndingModal from "../Game/EndingModal";
 
 const MemoryGame = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const numPlayers = useSelector((state) => state.game.numPlayers);
   const numCards = useSelector((state) => state.memory.numCards);
@@ -154,68 +147,8 @@ const MemoryGame = () => {
   const layoutPlayerB =
     numPlayers == 2 ? <Player role="B" myScore={score.B} /> : null;
 
-  const [isValidName, setIsValidName] = useState(true);
-  const handleChangeName = (e) => {
-    setIsValidName(true);
-    setInputName(e.target.value);
-    if (e.target.value.trim().length > 10) setIsValidName(false);
-  };
-
-  const nameInput = (
-    <div className={classes["single-ending"]}>
-      <img src={winImageA} alt="" />
-      <p>{endMessage}</p>
-      <TextField
-        type="text"
-        label="你的暱稱"
-        color="secondary"
-        onChange={handleChangeName}
-        value={inputName}
-        error={!isValidName}
-        helperText={!isValidName ? "長度上限為10個字" : null}
-      />
-    </div>
-  );
-
-  const pkEnding = (
-    <div className={classes["pk-ending"]}>
-      {endMessage === "萊西贏了！" && <img src={winImageA} alt="" />}
-      {endMessage === "剖西贏了！" && <img src={winImageB} alt="" />}
-      <p>{endMessage}</p>
-    </div>
-  );
-
   return (
     <GameContainer>
-      {endMessage && !isDone && numPlayers === 1 && (
-        <MessageModal
-          title="過關"
-          content={nameInput}
-          onConfirm={() => {
-            if (isValidName) {
-              setIsDone(true);
-            }
-          }}
-        />
-      )}
-      {endMessage && !isDone && numPlayers === 2 && (
-        <MessageModal
-          title="遊戲結束"
-          content={pkEnding}
-          onConfirm={() => {
-            navigate("/");
-          }}
-        />
-      )}
-      {isDone && numPlayers === 1 && (
-        <Rank
-          isDone={isDone}
-          name={inputName}
-          score={score.A}
-          gameType={"memory"}
-        />
-      )}
-
       {!isDone && (
         <React.Fragment>
           {/* mobile */}
@@ -250,6 +183,22 @@ const MemoryGame = () => {
 
       {/* Let modal be the last element to fix safari z-index error */}
       {showCard && <CardModal card={showCard} onConfirm={closeCardModal} />}
+      {endMessage && !isDone && (
+        <EndingModal
+          endMessage={endMessage}
+          setIsDone={setIsDone}
+          inputName={inputName}
+          setInputName={setInputName}
+        />
+      )}
+      {isDone && numPlayers === 1 && (
+        <Rank
+          isDone={isDone}
+          name={inputName}
+          score={score.A}
+          gameType={"memory"}
+        />
+      )}
     </GameContainer>
   );
 };

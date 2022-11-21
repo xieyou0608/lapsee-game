@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { gameActions } from "../../store/game-slice";
 
-import {
-  cardImages,
-  winImageA,
-  winImageB,
-} from "../../assets/card-images/CardImages";
+import { cardImages } from "../../assets/card-images/CardImages";
 import { textQuestions } from "./TextQuestions";
 import GameContainer from "../Game/GameContainer";
 import Player from "../Game/Player";
@@ -15,16 +10,15 @@ import Player from "../Game/Player";
 import classes from "./QuizGame.module.css";
 import Question from "./Question";
 import Choices from "./Choices";
-import MessageModal from "../UI/MessageModal";
 
 import Rank from "../Game/Rank";
-import { Box, TextField } from "@mui/material";
+import { Box } from "@mui/material";
 import { quizExtraScore as extra } from "../Game/ExtraScore";
+import EndingModal from "../Game/EndingModal";
 
 const NUM_QUESTIONS = 10;
 
 const QuizGame = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const numPlayers = useSelector((state) => state.game.numPlayers);
   const curPlayer = useSelector((state) => state.game.curPlayer);
@@ -122,37 +116,7 @@ const QuizGame = () => {
   const layoutPlayerB =
     numPlayers == 2 ? <Player role="B" myScore={score.B} /> : null;
 
-  const handleChangeName = (e) => {
-    setIsValidName(true);
-    setInputName(e.target.value);
-    if (e.target.value.trim().length > 10) setIsValidName(false);
-  };
-
   const [inputName, setInputName] = useState("");
-  const [isValidName, setIsValidName] = useState(true);
-  const nameInput = (
-    <div className={classes["single-ending"]}>
-      <img src={winImageA} alt="" />
-      <p>{endMessage}</p>
-      <TextField
-        type="text"
-        label="你的暱稱"
-        color="secondary"
-        onChange={handleChangeName}
-        value={inputName}
-        error={!isValidName}
-        helperText={!isValidName ? "長度上限為10個字" : null}
-      />
-    </div>
-  );
-
-  const pkEnding = (
-    <div className={classes["pk-ending"]}>
-      {endMessage === "萊西贏了！" && <img src={winImageA} alt="" />}
-      {endMessage === "剖西贏了！" && <img src={winImageB} alt="" />}
-      <p>{endMessage}</p>
-    </div>
-  );
 
   const quizArea = (
     <div className={classes["quiz-area"]}>
@@ -197,22 +161,12 @@ const QuizGame = () => {
           </Box>
         </React.Fragment>
       )}
-      {endMessage && !isDone && numPlayers === 2 && (
-        <MessageModal
-          title="遊戲結束"
-          content={pkEnding}
-          onConfirm={() => {
-            navigate("/");
-          }}
-        />
-      )}
-      {endMessage && !isDone && numPlayers === 1 && (
-        <MessageModal
-          title="遊戲結束"
-          content={nameInput}
-          onConfirm={() => {
-            setIsDone(true);
-          }}
+      {endMessage && !isDone && (
+        <EndingModal
+          endMessage={endMessage}
+          setIsDone={setIsDone}
+          inputName={inputName}
+          setInputName={setInputName}
         />
       )}
       {isDone && numPlayers === 1 && (

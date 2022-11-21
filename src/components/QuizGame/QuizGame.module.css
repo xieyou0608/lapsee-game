@@ -23,20 +23,3 @@
     flex-direction: column;
   }
 }
-
-.pk-ending,
-.single-ending {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.pk-ending img,
-.single-ending img {
-  height: 30vh;
-}
-
-.pk-ending p,
-.single-ending p {
-  text-align: center;
-}
