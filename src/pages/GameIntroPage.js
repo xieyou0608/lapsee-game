@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+
 import classes from "./GameIntroPage.module.css";
 import { cardImages } from "../assets/card-images/CardImages";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import MemoryIntro from "../components/GameIntro/MemoryIntro";
 import QuizIntro from "../components/GameIntro/QuizIntro";
 
-const GameIntroPage = ({ numCards, setNumCards }) => {
+const GameIntroPage = () => {
   const [showMemoryIntro, setShowMemoryIntro] = useState(false);
   const [showQuizIntro, setShowQuizIntro] = useState(false);
 
@@ -28,13 +29,7 @@ const GameIntroPage = ({ numCards, setNumCards }) => {
 
   return (
     <React.Fragment>
-      {showMemoryIntro && (
-        <MemoryIntro
-          onClose={closeModal}
-          numCards={numCards}
-          setNumCards={setNumCards}
-        />
-      )}
+      {showMemoryIntro && <MemoryIntro onClose={closeModal} />}
       {showQuizIntro && <QuizIntro onClose={closeModal} />}
 
       <div className={classes["memory-intro"]}>

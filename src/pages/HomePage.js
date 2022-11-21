@@ -1,5 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { gameActions } from "../store/game-slice";
+
 import Header from "../components/Layout/Header";
 import StartButton from "../components/UI/StartButton";
 import classes from "./HomePage.module.css";
@@ -9,14 +12,15 @@ import figure2 from "../assets/images/figure2.png";
 import RankLinks from "../components/Layout/RankLinks";
 import LapseeLinks from "../components/Layout/LapseeLinks";
 
-const HomePage = ({ setNumPlayers }) => {
+const HomePage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const singlePlayerStart = () => {
-    setNumPlayers(1);
+    dispatch(gameActions.setNumPlayers(1));
     navigate("/intro");
   };
   const twoPlayerStart = () => {
-    setNumPlayers(2);
+    dispatch(gameActions.setNumPlayers(2));
     navigate("/intro");
   };
 

@@ -1,23 +1,25 @@
 import React from "react";
 import classes from "./SettingButton.module.css";
+import { useSelector, useDispatch } from "react-redux";
+import { memoryActions } from "../../store/memory-slice";
 
-const SettingButton = (props) => {
-  const { setNumber, nums, current } = props;
+const SettingButton = ({ nums }) => {
+  const currentNumCards = useSelector((state) => state.memory.numCards);
+  const dispatch = useDispatch();
+  const settingHandler = () => {
+    dispatch(memoryActions.setNumCards(nums));
+  };
 
   let btnClass;
-  if (current === nums) {
+  if (currentNumCards === nums) {
     btnClass = classes["setting-btn"] + " " + classes["chosen-btn"];
   } else {
     btnClass = classes["setting-btn"];
   }
 
-  const settingHandler = () => {
-    setNumber(nums);
-  };
-  const content = props.children ? props.children : nums;
   return (
     <button onClick={settingHandler} className={btnClass}>
-      {content}
+      {nums}
     </button>
   );
 };

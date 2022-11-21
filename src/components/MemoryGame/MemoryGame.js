@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import classes from "./MemoryGame.module.css";
 import {
   cardImages,
@@ -16,7 +17,10 @@ import GameContainer from "../Game/GameContainer";
 import Rank from "../Game/Rank";
 import { memoryExtraScore as extra } from "../Game/ExtraScore";
 
-const MemoryGame = ({ numCards, numPlayers }) => {
+const MemoryGame = () => {
+  const numPlayers = useSelector((state) => state.game.numPlayers);
+  const numCards = useSelector((state) => state.memory.numCards);
+
   const navigate = useNavigate();
   const [deck, setDeck] = useState([]);
   const [chosen, setChosen] = useState([]);

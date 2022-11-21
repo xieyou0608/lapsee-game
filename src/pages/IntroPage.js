@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import classes from "./IntroPage.module.css";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
+import classes from "./IntroPage.module.css";
+
 import { IconButton } from "@mui/material";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 
-const IntroPage = ({ numPlayers }) => {
+const IntroPage = () => {
+  const numPlayers = useSelector((state) => state.game.numPlayers);
   const you = numPlayers === 1 ? "你" : "你們";
   const story = [
     "很久以前，各個媒體擁有自己的村莊，他們愉快地互相配合，將最新資訊傳遞給雲朵下的人們。",

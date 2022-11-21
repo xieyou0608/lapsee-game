@@ -7,10 +7,10 @@ const Setting = ({ numCards, setNumCards }) => {
     <section className={classes["setting-section"]}>
       <div>
         <p>卡牌數量</p>
-        <SettingButton setNumber={setNumCards} nums={4} current={numCards} />
-        <SettingButton setNumber={setNumCards} nums={8} current={numCards} />
-        <SettingButton setNumber={setNumCards} nums={12} current={numCards} />
-        <SettingButton setNumber={setNumCards} nums={16} current={numCards} />
+        <SettingButton nums={4} />
+        <SettingButton nums={8} />
+        <SettingButton nums={12} />
+        <SettingButton nums={16} />
       </div>
     </section>
   );

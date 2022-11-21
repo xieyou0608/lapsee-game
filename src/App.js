@@ -10,36 +10,15 @@ import QuizPage from "./pages/QuizPage";
 import Rank from "./components/Game/Rank";
 
 function App() {
-  const [numCards, setNumCards] = useState(16);
-  const [numPlayers, setNumPlayers] = useState(1);
-
   return (
     <BrowserRouter>
       <div className={classes.app}>
         <Routes>
-          <Route
-            path="/"
-            element={<HomePage setNumPlayers={setNumPlayers} />}
-          />
-          <Route
-            path="/intro"
-            element={<IntroPage numPlayers={numPlayers} />}
-          />
-          <Route
-            path="/game-intro"
-            element={
-              <GameIntroPage numCards={numCards} setNumCards={setNumCards} />
-            }
-          />
-
-          <Route
-            path="/memory-game"
-            element={<MemoryPage numCards={numCards} numPlayers={numPlayers} />}
-          />
-          <Route
-            path="quiz-game"
-            element={<QuizPage numPlayers={numPlayers} />}
-          />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/intro" element={<IntroPage />} />
+          <Route path="/game-intro" element={<GameIntroPage />} />
+          <Route path="/memory-game" element={<MemoryPage />} />
+          <Route path="quiz-game" element={<QuizPage />} />
           <Route
             path="memory-rank"
             element={<Rank isDone={false} gameType="memory" />}

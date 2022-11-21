@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
   cardImages,
   winImageA,
@@ -20,7 +21,8 @@ import { quizExtraScore as extra } from "../Game/ExtraScore";
 
 const NUM_QUESTIONS = 10;
 
-const QuizGame = ({ numPlayers }) => {
+const QuizGame = () => {
+  const numPlayers = useSelector((state) => state.game.numPlayers);
   const navigate = useNavigate();
   const [questions, setQuestions] = useState(null);
   const [count, setCount] = useState(0);
