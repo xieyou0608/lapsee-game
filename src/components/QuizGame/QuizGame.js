@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { gameActions } from "../../store/game-slice";
+
 import {
   cardImages,
   winImageA,
@@ -22,12 +24,14 @@ import { quizExtraScore as extra } from "../Game/ExtraScore";
 const NUM_QUESTIONS = 10;
 
 const QuizGame = () => {
-  const numPlayers = useSelector((state) => state.game.numPlayers);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const numPlayers = useSelector((state) => state.game.numPlayers);
+  const curPlayer = useSelector((state) => state.game.curPlayer);
+
   const [questions, setQuestions] = useState(null);
   const [count, setCount] = useState(0);
 
-  const [curPlayer, setCurPlayer] = useState("A");
   const [score, setScore] = useState({ A: 0, B: 0 });
   const [combo, setCombo] = useState(0);
 
@@ -86,7 +90,7 @@ const QuizGame = () => {
     }
     setTimeout(() => {
       if (numPlayers === 2) {
-        setCurPlayer((prev) => (prev == "A" ? "B" : "A"));
+        dispatch(gameActions.changePlayer());
       }
       setCount((prev) => prev + 1);
       setChosen(null);
@@ -114,18 +118,9 @@ const QuizGame = () => {
     }
   }, [count, score]);
 
-  const layoutPlayerA = (
-    <Player
-      score={score.A}
-      playerName="萊西"
-      isMyTurn={numPlayers === 2 && curPlayer === "A"}
-    />
-  );
-
+  const layoutPlayerA = <Player role="A" myScore={score.A} />;
   const layoutPlayerB =
-    numPlayers == 2 ? (
-      <Player score={score.B} playerName="剖西" isMyTurn={curPlayer === "B"} />
-    ) : null;
+    numPlayers == 2 ? <Player role="B" myScore={score.B} /> : null;
 
   const handleChangeName = (e) => {
     setIsValidName(true);

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import { gameActions } from "../../store/game-slice";
+
 import classes from "./MemoryGame.module.css";
 import {
   cardImages,
   winImageA,
   winImageB,
 } from "../../assets/card-images/CardImages";
-
 import { Box, TextField } from "@mui/material";
 import Card from "./Card";
 import CardModal from "../UI/CardModal";
@@ -18,16 +20,18 @@ import Rank from "../Game/Rank";
 import { memoryExtraScore as extra } from "../Game/ExtraScore";
 
 const MemoryGame = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const numPlayers = useSelector((state) => state.game.numPlayers);
   const numCards = useSelector((state) => state.memory.numCards);
+  const curPlayer = useSelector((state) => state.game.curPlayer);
 
-  const navigate = useNavigate();
   const [deck, setDeck] = useState([]);
   const [chosen, setChosen] = useState([]);
   const [pairs, setPairs] = useState(0);
   const [showCard, setShowCard] = useState(null);
 
-  const [curPlayer, setCurPlayer] = useState("A");
   const [score, setScore] = useState({ A: 0, B: 0 });
   const [combo, setCombo] = useState(0);
 
@@ -85,7 +89,7 @@ const MemoryGame = () => {
   const failMatch = () => {
     setChosen([]);
     if (numPlayers === 2) {
-      setCurPlayer((prev) => (prev == "A" ? "B" : "A"));
+      dispatch(gameActions.changePlayer());
     }
     setCombo(0);
   };
@@ -146,18 +150,9 @@ const MemoryGame = () => {
     </div>
   );
 
-  const layoutPlayerA = (
-    <Player
-      score={score.A}
-      playerName="萊西"
-      isMyTurn={numPlayers === 2 && curPlayer == "A"}
-    />
-  );
-
+  const layoutPlayerA = <Player role="A" myScore={score.A} />;
   const layoutPlayerB =
-    numPlayers == 2 ? (
-      <Player score={score.B} playerName="剖西" isMyTurn={curPlayer == "B"} />
-    ) : null;
+    numPlayers == 2 ? <Player role="B" myScore={score.B} /> : null;
 
   const [isValidName, setIsValidName] = useState(true);
   const handleChangeName = (e) => {
