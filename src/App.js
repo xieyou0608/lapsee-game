@@ -8,6 +8,7 @@ import GameIntroPage from "./pages/GameIntroPage";
 import MemoryPage from "./pages/MemoryPage";
 import QuizPage from "./pages/QuizPage";
 import Rank from "./components/Game/Rank";
+import AdminPage from "./pages/AdminPage";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="quiz-game" element={<QuizPage />} />
           <Route path="memory-rank" element={<Rank gameType="memory" />} />
           <Route path="quiz-rank" element={<Rank gameType="quiz" />} />
+          <Route path="admin" element={<AdminPage />} />
         </Routes>
       </div>
     </BrowserRouter>

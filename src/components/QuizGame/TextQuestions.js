@@ -109,7 +109,8 @@ const texts = [
   },
 ];
 
-const textQuestions = texts.map((question) => {
+const textQuestions = texts.map((q) => {
+  const question = { ...q };
   question.choices = question.choices
     .trim()
     .split("/")
@@ -117,4 +118,4 @@ const textQuestions = texts.map((question) => {
   return question;
 });
 
-export { textQuestions };
+export { texts, textQuestions };

@@ -4,10 +4,6 @@
   align-items: center;
   justify-content: center;
 
-  position: fixed;
   background: #f4d749;
-  height: 100%;
-  width: 100%;
-
-  font-family: "Noto Sans TC", sans-serif;
+  min-height: 100vh;
 }
