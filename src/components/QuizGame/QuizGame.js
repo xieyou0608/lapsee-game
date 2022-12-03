@@ -5,7 +5,7 @@ import { gameActions } from "../../store/game-slice";
 import classes from "./QuizGame.module.css";
 import { Box } from "@mui/material";
 
-import GameContainer from "../Game/GameContainer";
+import GameLayout from "../Layout/GameLayout";
 import Player from "../Game/Player";
 import Question from "./Question";
 import Choices from "./Choices";
@@ -128,7 +128,7 @@ const QuizGame = () => {
   );
 
   return (
-    <GameContainer>
+    <GameLayout>
       {!(count === NUM_QUESTIONS) && (
         <React.Fragment>
           <Box
@@ -160,7 +160,7 @@ const QuizGame = () => {
       {endMessage && (
         <EndingModal endMessage={endMessage} score={score.A} gameType="quiz" />
       )}
-    </GameContainer>
+    </GameLayout>
   );
 };
 

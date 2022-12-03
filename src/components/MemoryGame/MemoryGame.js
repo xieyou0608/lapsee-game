@@ -5,7 +5,7 @@ import { gameActions } from "../../store/game-slice";
 import classes from "./MemoryGame.module.css";
 import { Box } from "@mui/material";
 
-import GameContainer from "../Game/GameContainer";
+import GameLayout from "../Layout/GameLayout";
 import Player from "../Game/Player";
 import Card from "./Card";
 import CardModal from "../UI/CardModal";
@@ -146,7 +146,7 @@ const MemoryGame = () => {
     numPlayers == 2 ? <Player role="B" myScore={score.B} /> : null;
 
   return (
-    <GameContainer>
+    <GameLayout game>
       {!endMessage && (
         <React.Fragment>
           {/* mobile */}
@@ -188,7 +188,7 @@ const MemoryGame = () => {
           gameType="memory"
         />
       )}
-    </GameContainer>
+    </GameLayout>
   );
 };
 
