@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+import AppLayout from "../components/Layout/AppLayout";
 import classes from "./IntroPage.module.css";
 
 import { IconButton } from "@mui/material";
@@ -35,26 +36,28 @@ const IntroPage = () => {
   };
 
   return (
-    <div className={classes.intro}>
-      <p>{story[page]}</p>
-      <div className={classes.footer}>
-        {page !== 0 && (
-          <IconButton onClick={prevPage} size="large">
-            <SkipPreviousIcon fontSize="large" />
-          </IconButton>
-        )}
-        {page !== story.length - 1 && (
-          <IconButton onClick={nextPage} size="large">
-            <SkipNextIcon fontSize="large" />
-          </IconButton>
-        )}
-        {page === story.length - 1 && (
-          <button className={classes.btn} onClick={goToGameIntro}>
-            出發!
-          </button>
-        )}
+    <AppLayout>
+      <div className={classes.intro}>
+        <p>{story[page]}</p>
+        <div className={classes.footer}>
+          {page !== 0 && (
+            <IconButton onClick={prevPage} size="large">
+              <SkipPreviousIcon fontSize="large" />
+            </IconButton>
+          )}
+          {page !== story.length - 1 && (
+            <IconButton onClick={nextPage} size="large">
+              <SkipNextIcon fontSize="large" />
+            </IconButton>
+          )}
+          {page === story.length - 1 && (
+            <button className={classes.btn} onClick={goToGameIntro}>
+              出發!
+            </button>
+          )}
+        </div>
       </div>
-    </div>
+    </AppLayout>
   );
 };
 

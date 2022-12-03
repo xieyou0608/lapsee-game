@@ -3,7 +3,7 @@ import classes from "./ModalContainer.module.css";
 
 const ModalContainer = (props) => {
   return (
-    <React.Fragment>
+    <div className={classes["modal-layout"]}>
       <div className={classes["backdrop"]} onClick={props.onClose} />
       <div className={classes["modal"]}>
         <header className={classes["title"]}>
@@ -11,7 +11,7 @@ const ModalContainer = (props) => {
         </header>
         {props.children}
       </div>
-    </React.Fragment>
+    </div>
   );
 };
 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import classes from "./GameIntroPage.module.css";
+import AppLayout from "../components/Layout/AppLayout";
 import { cardImages } from "../assets/card-images/CardImages";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import MemoryIntro from "../components/GameIntro/MemoryIntro";
@@ -28,7 +29,7 @@ const GameIntroPage = () => {
   const card4Img = cardImages[3].src;
 
   return (
-    <React.Fragment>
+    <AppLayout style={{ overflow: "hidden" }}>
       {showMemoryIntro && <MemoryIntro onClose={closeModal} />}
       {showQuizIntro && <QuizIntro onClose={closeModal} />}
 
@@ -62,7 +63,7 @@ const GameIntroPage = () => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </AppLayout>
   );
 };
 

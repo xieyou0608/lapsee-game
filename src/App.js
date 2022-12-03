@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import classes from "./App.module.css";
 
 import HomePage from "./pages/HomePage";
 import IntroPage from "./pages/IntroPage";
@@ -13,18 +12,16 @@ import AdminPage from "./pages/AdminPage";
 function App() {
   return (
     <BrowserRouter>
-      <div className={classes.app}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/intro" element={<IntroPage />} />
-          <Route path="/game-intro" element={<GameIntroPage />} />
-          <Route path="/memory-game" element={<MemoryPage />} />
-          <Route path="quiz-game" element={<QuizPage />} />
-          <Route path="memory-rank" element={<Rank gameType="memory" />} />
-          <Route path="quiz-rank" element={<Rank gameType="quiz" />} />
-          <Route path="admin" element={<AdminPage />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/intro" element={<IntroPage />} />
+        <Route path="/game-intro" element={<GameIntroPage />} />
+        <Route path="/memory-game" element={<MemoryPage />} />
+        <Route path="quiz-game" element={<QuizPage />} />
+        <Route path="memory-rank" element={<Rank gameType="memory" />} />
+        <Route path="quiz-rank" element={<Rank gameType="quiz" />} />
+        <Route path="admin" element={<AdminPage />} />
+      </Routes>
     </BrowserRouter>
   );
 }

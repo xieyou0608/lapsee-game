@@ -49,22 +49,26 @@ const EndingModal = ({ endMessage, score, gameType }) => {
 
   const recordNewRank = async () => {
     if (inputName === "") {
-      navigate("/");
+      navigate("/" + gameType + "-rank");
       return;
     }
 
     //need to handle http error
     let curRank = await RankService.loadRank(gameType);
-    let inserted = false;
-    for (let i = 0; i < curRank.length; i++) {
-      if (score >= curRank[i].score) {
-        curRank.splice(i, 0, { name: inputName, score });
-        inserted = true;
-        break;
+    if (!curRank) {
+      curRank = [{ name: inputName, score }];
+    } else {
+      let inserted = false;
+      for (let i = 0; i < curRank.length; i++) {
+        if (score >= curRank[i].score) {
+          curRank.splice(i, 0, { name: inputName, score });
+          inserted = true;
+          break;
+        }
       }
-    }
-    if (!inserted && curRank.length < 10) {
-      curRank.push({ name: inputName, score });
+      if (!inserted && curRank.length < 10) {
+        curRank.push({ name: inputName, score });
+      }
     }
 
     curRank = curRank.slice(0, 10);

@@ -1,5 +1,5 @@
 .slash {
-  width: max(100vw, 100vh);
+  width: calc(max(100vw, 100vh) * 1.414);
   height: 1rem;
   background-color: white;
   transform: rotateZ(45deg);

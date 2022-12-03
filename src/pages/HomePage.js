@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { gameActions } from "../store/game-slice";
 
+import AppLayout from "../components/Layout/AppLayout";
 import Header from "../components/Layout/Header";
 import StartButton from "../components/UI/StartButton";
 import classes from "./HomePage.module.css";
@@ -25,7 +26,7 @@ const HomePage = () => {
   };
 
   return (
-    <React.Fragment>
+    <AppLayout>
       <img className={classes["figure1"]} src={figure1} alt="" />
       <div className={classes.main}>
         <Header />
@@ -35,7 +36,7 @@ const HomePage = () => {
         <LapseeLinks />
       </div>
       <img className={classes["figure2"]} src={figure2} alt="" />
-    </React.Fragment>
+    </AppLayout>
   );
 };
 
