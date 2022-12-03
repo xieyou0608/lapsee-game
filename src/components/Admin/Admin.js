@@ -3,6 +3,7 @@ import AdminService from "../../services/Admin.service";
 import { TextField, Button, styled, Box } from "@mui/material";
 import { texts } from "../QuizGame/TextQuestions";
 import { v4 as uuidv4 } from "uuid";
+import Login from "./Login";
 
 Button.defaultProps = {
   variant: "contained",
@@ -71,7 +72,12 @@ const SaveBox = styled(Box)`
 `;
 
 const Admin = () => {
+  // 登入之後打 firebase api 會在資料庫再確認一次管理員身分
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("lapsee_user"))
+  );
   const [questions, setQuestions] = useState([]);
+
   const numRef = useRef();
   const descriptionRef = useRef();
   const choicesRef = useRef();
@@ -79,23 +85,31 @@ const Admin = () => {
 
   const loadQuestions = async () => {
     try {
-      const res = await AdminService.getQuestions();
+      const res = await AdminService.getQuestions(user);
       const objData = res.data;
       if (objData) {
         const arrayData = Object.keys(objData).map((key) => objData[key]);
-        console.log(arrayData);
         setQuestions(arrayData);
       } else {
         setQuestions([]);
       }
     } catch (error) {
       console.log(error);
+      if (error.response.status === 401) {
+        // token expired
+        localStorage.removeItem("lapsee_user");
+        setUser(null);
+      } else {
+        window.alert(error.message);
+      }
     }
   };
 
   useEffect(() => {
-    loadQuestions();
-  }, []);
+    if (user) {
+      loadQuestions();
+    }
+  }, [user]);
 
   const addNewQuestions = (event) => {
     event.preventDefault();
@@ -126,7 +140,7 @@ const Admin = () => {
     if (!window.confirm("要儲存了嗎?")) return;
     console.log(questions);
     try {
-      await AdminService.putQuestions(questions);
+      await AdminService.putQuestions(questions, user);
       alert("儲存成功!");
     } catch (e) {
       alert("儲存失敗!");
@@ -153,76 +167,92 @@ const Admin = () => {
   //   loadQuestions();
   // };
 
+  const logoutHandler = () => {
+    if (window.confirm("要登出嗎?")) {
+      localStorage.removeItem("lapsee_user");
+      setUser(null);
+    }
+  };
+
   return (
     <React.Fragment>
-      <h1>後台</h1>
-      <QuestionsLayout>
-        {questions.map((question, index) => (
-          <QuestionBox key={uuidv4()}>
-            <div className="content">
-              <span>
-                {index + 1}. {question.description}
-              </span>
-              <div>
-                <span className="choices">{question.choices}</span>
-                <span className="answer">A: {question.answer}</span>
-              </div>
-            </div>
-            <Button onClick={() => deleteQuestion(index)} color="error">
-              刪除
+      {!user && <Login setUser={setUser} />}
+      {user && (
+        <React.Fragment>
+          <h1>後台</h1>
+          <QuestionsLayout>
+            {questions.map((question, index) => (
+              <QuestionBox key={uuidv4()}>
+                <div className="content">
+                  <span>
+                    {index + 1}. {question.description}
+                  </span>
+                  <div>
+                    <span className="choices">{question.choices}</span>
+                    <span className="answer">A: {question.answer}</span>
+                  </div>
+                </div>
+                <Button onClick={() => deleteQuestion(index)} color="error">
+                  刪除
+                </Button>
+              </QuestionBox>
+            ))}
+          </QuestionsLayout>
+
+          <form onSubmit={addNewQuestions}>
+            <EditBox>
+              <span>新增題目</span>
+              <TextField
+                label={`題號(${questions.length + 1})`}
+                inputRef={numRef}
+              />
+              <TextField
+                label="題目敘述"
+                inputRef={descriptionRef}
+                multiline
+                minRows={3}
+                sx={{ width: "100%" }}
+              />
+              <Box sx={{ width: "100%" }}>
+                <TextField
+                  label="選項(用/分隔)"
+                  inputRef={choicesRef}
+                  multiline
+                  sx={{ width: "67%", mr: "3%" }}
+                />
+                <TextField
+                  label="答案"
+                  inputRef={answerRef}
+                  multiline
+                  sx={{ width: "30%" }}
+                />
+              </Box>
+              <Button type="submit" size="large" fullWidth>
+                新增
+              </Button>
+            </EditBox>
+          </form>
+
+          <SaveBox>
+            <p>
+              題號沒有特別輸入的話就會加在最後面
+              <br />
+              全部的操作會在按儲存後才更新到資料庫
+              <br />
+              要取消的話只要重新整理網頁就好
+              <br />
+            </p>
+            <Button onClick={saveQuestions} color="secondary">
+              儲存全部
             </Button>
-          </QuestionBox>
-        ))}
-      </QuestionsLayout>
+            <br />
+            <Button onClick={logoutHandler}>登出</Button>
+          </SaveBox>
 
-      <form onSubmit={addNewQuestions}>
-        <EditBox>
-          <span>新增題目</span>
-          <TextField
-            label={`題號(${questions.length + 1})`}
-            inputRef={numRef}
-          />
-          <TextField
-            label="題目敘述"
-            inputRef={descriptionRef}
-            multiline
-            minRows={3}
-            sx={{ width: "100%" }}
-          />
-          <Box sx={{ width: "100%" }}>
-            <TextField
-              label="選項(用/分隔)"
-              inputRef={choicesRef}
-              multiline
-              sx={{ width: "67%", mr: "3%" }}
-            />
-            <TextField
-              label="答案"
-              inputRef={answerRef}
-              multiline
-              sx={{ width: "30%" }}
-            />
-          </Box>
-          <Button type="submit" size="large" fullWidth>
-            新增
-          </Button>
-        </EditBox>
-      </form>
-
-      <SaveBox>
-        <p>
-          全部的操作會在按儲存後才更新到資料庫
-          <br />
-          要取消的話只要重新整理網頁就好
-          <br />
-        </p>
-        <Button onClick={saveQuestions} color="secondary">
-          儲存全部
-        </Button>
-      </SaveBox>
-
-      {/* <Button onClick={addAllQuestions}>匯入舊題目</Button> */}
-      {/* <Button onClick={deleteAllQuestions}>刪除所有題目</Button> */}
+          {/* <Button onClick={addAllQuestions}>匯入舊題目</Button> */}
+          {/* <Button onClick={deleteAllQuestions}>刪除所有題目</Button> */}
+        </React.Fragment>
+      )}
     </React.Fragment>
   );
 };
