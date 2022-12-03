@@ -21,8 +21,8 @@ const Login = ({ setUser }) => {
 
   const loginHandler = async (e) => {
     e.preventDefault();
-    const email = emailRef.current.value;
-    const password = passwordRef.current.value;
+    const email = emailRef.current.value.trim();
+    const password = passwordRef.current.value.trim();
     try {
       const res = await AdminService.login(email, password);
       console.log(res);

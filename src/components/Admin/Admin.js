@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminService from "../../services/Admin.service";
-import { TextField, Button, styled, Box } from "@mui/material";
-import { texts } from "../QuizGame/TextQuestions";
+import { Button, styled, Box } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
 import Login from "./Login";
+import { AddForm, JsonForm } from "./Edits";
+import Question from "./Question";
 
 Button.defaultProps = {
   variant: "contained",
@@ -15,52 +16,6 @@ const QuestionsLayout = styled("div")`
 
   ${({ theme }) => theme.breakpoints.down("sm")} {
     grid-template-columns: 1fr;
-  }
-`;
-
-const QuestionBox = styled("div")`
-  display: flex;
-  align-items: center;
-  column-gap: 2vw;
-  margin: 1vw;
-  padding: 1vw 2vw;
-  width: 40vw;
-  border: solid black 0.2vw;
-  border-radius: 1.5vw;
-  background-color: white;
-
-  ${({ theme }) => theme.breakpoints.down("sm")} {
-    padding: 1vw 5vw;
-    width: 80vw;
-  }
-
-  .content {
-    flex-grow: 1;
-
-    div {
-      display: flex;
-      justify-content: space-between;
-
-      ${({ theme }) => theme.breakpoints.down("sm")} {
-        flex-direction: column;
-      }
-
-      .choices {
-        color: blue;
-      }
-      .answer {
-        color: red;
-      }
-    }
-  }
-`;
-
-const EditBox = styled(QuestionBox)`
-  display: flex;
-  flex-direction: column;
-  row-gap: 2vh;
-  ${({ theme }) => theme.breakpoints.down("sm")} {
-    padding: 5vw 5vw;
   }
 `;
 
@@ -77,11 +32,6 @@ const Admin = () => {
     JSON.parse(localStorage.getItem("lapsee_user"))
   );
   const [questions, setQuestions] = useState([]);
-
-  const numRef = useRef();
-  const descriptionRef = useRef();
-  const choicesRef = useRef();
-  const answerRef = useRef();
 
   const loadQuestions = async () => {
     try {
@@ -111,13 +61,7 @@ const Admin = () => {
     }
   }, [user]);
 
-  const addNewQuestions = (event) => {
-    event.preventDefault();
-    const num = numRef.current.value.trim();
-    const description = descriptionRef.current.value.trim();
-    const choices = choicesRef.current.value.trim();
-    const answer = answerRef.current.value.trim();
-    const newQuestion = { description, choices, answer };
+  const addNewQuestions = (num, newQuestion) => {
     setQuestions((prev) => {
       const length = prev.length;
       if (!num || num <= 0 || num > length) {
@@ -149,24 +93,6 @@ const Admin = () => {
     loadQuestions();
   };
 
-  // const addAllQuestions = async () => {
-  //   try {
-  //     await AdminService.putQuestions(texts);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  //   loadQuestions();
-  // };
-
-  // const deleteAllQuestions = async () => {
-  //   try {
-  //     await AdminService.deleteAllQuesiton();
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  //   loadQuestions();
-  // };
-
   const logoutHandler = () => {
     if (window.confirm("要登出嗎?")) {
       localStorage.removeItem("lapsee_user");
@@ -180,59 +106,18 @@ const Admin = () => {
       {user && (
         <React.Fragment>
           <h1>後台</h1>
+          <JsonForm setQuestions={setQuestions} />
           <QuestionsLayout>
             {questions.map((question, index) => (
-              <QuestionBox key={uuidv4()}>
-                <div className="content">
-                  <span>
-                    {index + 1}. {question.description}
-                  </span>
-                  <div>
-                    <span className="choices">{question.choices}</span>
-                    <span className="answer">A: {question.answer}</span>
-                  </div>
-                </div>
-                <Button onClick={() => deleteQuestion(index)} color="error">
-                  刪除
-                </Button>
-              </QuestionBox>
+              <Question
+                key={uuidv4()}
+                question={question}
+                index={index}
+                deleteQuestion={deleteQuestion}
+              />
             ))}
           </QuestionsLayout>
-
-          <form onSubmit={addNewQuestions}>
-            <EditBox>
-              <span>新增題目</span>
-              <TextField
-                label={`題號(${questions.length + 1})`}
-                inputRef={numRef}
-              />
-              <TextField
-                label="題目敘述"
-                inputRef={descriptionRef}
-                multiline
-                minRows={3}
-                sx={{ width: "100%" }}
-              />
-              <Box sx={{ width: "100%" }}>
-                <TextField
-                  label="選項(用/分隔)"
-                  inputRef={choicesRef}
-                  multiline
-                  sx={{ width: "67%", mr: "3%" }}
-                />
-                <TextField
-                  label="答案"
-                  inputRef={answerRef}
-                  multiline
-                  sx={{ width: "30%" }}
-                />
-              </Box>
-              <Button type="submit" size="large" fullWidth>
-                新增
-              </Button>
-            </EditBox>
-          </form>
-
+          <AddForm questions={questions} addNewQuestions={addNewQuestions} />
           <SaveBox>
             <p>
               題號沒有特別輸入的話就會加在最後面
@@ -248,7 +133,6 @@ const Admin = () => {
             <br />
             <Button onClick={logoutHandler}>登出</Button>
           </SaveBox>
-
           {/* <Button onClick={addAllQuestions}>匯入舊題目</Button> */}
           {/* <Button onClick={deleteAllQuestions}>刪除所有題目</Button> */}
         </React.Fragment>
