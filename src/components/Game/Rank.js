@@ -6,12 +6,17 @@ import StartButton from "../UI/StartButton";
 import { useNavigate } from "react-router-dom";
 
 const Rank = ({ gameType }) => {
-  const [rank, setRank] = useState(null);
+  const [rank, setRank] = useState([]);
   const navigate = useNavigate();
 
   const loadData = async () => {
-    const curRank = await RankService.loadRank(gameType);
-    setRank(curRank.map((record, idx) => ({ ...record, place: idx })));
+    try {
+      const res = await RankService.getRank(gameType);
+      const curRank = res.data;
+      setRank(curRank.map((record, idx) => ({ ...record, place: idx })));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {

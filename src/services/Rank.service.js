@@ -1,19 +1,18 @@
-const firebaseAPI =
-  "https://lapsee-memory-game-default-rtdb.asia-southeast1.firebasedatabase.app/rank/";
+import axios from "axios";
+
+// Firebase Functions
+const RANK_API =
+  "https://asia-east1-lapsee-memory-game.cloudfunctions.net/api/rank/";
 
 class RankService {
-  async loadRank(game) {
-    const response = await fetch(firebaseAPI + game + ".json");
-    const data = await response.json();
-    return data;
+  getRank(game) {
+    return axios.get(RANK_API + game);
   }
-  async updateRank(newRank, game) {
-    const response = await fetch(firebaseAPI + game + ".json", {
-      method: "PUT",
-      body: JSON.stringify(newRank),
+  postScore(game, name, score) {
+    return axios.post(RANK_API + game, {
+      name,
+      score,
     });
-    const data = response.json();
-    return data;
   }
 }
 

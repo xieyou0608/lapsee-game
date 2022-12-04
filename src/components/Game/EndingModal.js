@@ -53,26 +53,12 @@ const EndingModal = ({ endMessage, score, gameType }) => {
       return;
     }
 
-    //need to handle http error
-    let curRank = await RankService.loadRank(gameType);
-    if (!curRank) {
-      curRank = [{ name: inputName, score }];
-    } else {
-      let inserted = false;
-      for (let i = 0; i < curRank.length; i++) {
-        if (score >= curRank[i].score) {
-          curRank.splice(i, 0, { name: inputName, score });
-          inserted = true;
-          break;
-        }
-      }
-      if (!inserted && curRank.length < 10) {
-        curRank.push({ name: inputName, score });
-      }
+    try {
+      const res = await RankService.postScore(gameType, inputName, score);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
     }
-
-    curRank = curRank.slice(0, 10);
-    await RankService.updateRank(curRank, gameType);
     navigate("/" + gameType + "-rank");
   };
 
