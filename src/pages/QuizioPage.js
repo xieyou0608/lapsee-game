@@ -25,8 +25,12 @@ const InputNameModal = ({ gameType }) => {
   const dispatch = useDispatch();
   const userName = useSelector((state) => state.quizio.userName);
   const players = useSelector((state) => state.quizio.players);
-  const [invalidMsg, setInvalidMsg] = useState("請輸入暱稱");
+  const [invalidMsg, setInvalidMsg] = useState("");
   const [showMsg, setShowMsg] = useState(false);
+
+  useEffect(() => {
+    if (!userName) setInvalidMsg("請輸入暱稱");
+  }, []);
 
   const changeNameHandler = (e) => {
     const inputName = e.target.value.trim();

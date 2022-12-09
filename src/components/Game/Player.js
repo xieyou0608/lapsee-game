@@ -6,7 +6,7 @@ import { Box, Chip } from "@mui/material";
 import playerA from "../../assets/images/LAPSEE-角色-2.png";
 import playerB from "../../assets/images/LAPSEE-角色-1.png";
 
-const Player = ({ role, myScore, userName, gameType }) => {
+const Player = ({ role, myScore, userName, gameType, judged = true }) => {
   const { numPlayers, curPlayer } = useSelector((state) => state.game);
 
   let playerName = role === "A" ? "萊西" : "剖西";
@@ -36,7 +36,7 @@ const Player = ({ role, myScore, userName, gameType }) => {
           src={playerSrc}
           alt={playerName}
         />
-        <div className={classes["score"]}>{myScore}</div>
+        <div className={classes["score"]}>{judged ? myScore : "hmm..."}</div>
       </Box>
       <Box
         sx={{
@@ -54,7 +54,7 @@ const Player = ({ role, myScore, userName, gameType }) => {
         />
         <div style={{ width: "100%" }}>
           <div className={playerStyle}>{playerName}</div>
-          <div className={classes.score}>{myScore}</div>
+          <div className={classes.score}>{judged ? myScore : "hmm..."}</div>
         </div>
       </Box>
     </React.Fragment>
