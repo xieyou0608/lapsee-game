@@ -6,16 +6,19 @@ import { Box, Chip } from "@mui/material";
 import playerA from "../../assets/images/LAPSEE-角色-2.png";
 import playerB from "../../assets/images/LAPSEE-角色-1.png";
 
-const Player = ({ role, myScore }) => {
+const Player = ({ role, myScore, userName, gameType }) => {
   const { numPlayers, curPlayer } = useSelector((state) => state.game);
 
-  const playerName = role === "A" ? "萊西" : "剖西";
-  const playerSrc = role === "A" ? playerA : playerB;
+  let playerName = role === "A" ? "萊西" : "剖西";
+  if (userName) {
+    playerName = userName;
+  }
 
-  const isMyTurn = numPlayers === 2 && curPlayer === role;
-  const playerStyle = `${classes["player-name"]} ${
-    isMyTurn ? classes.playing : ""
-  }`;
+  const playerSrc = role === "A" ? playerA : playerB;
+  let playerStyle = classes["player-name"];
+  if (gameType === "memory" && curPlayer === role) {
+    playerStyle = classes["player-name"] + " " + classes["playing"];
+  }
 
   return (
     <React.Fragment>

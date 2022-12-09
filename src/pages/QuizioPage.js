@@ -6,9 +6,11 @@ import { ref, onValue, update } from "firebase/database";
 
 import { generateRandomString } from "../components/Online/random";
 import { quizioActions } from "../store/quizio-slice";
+import { gameActions } from "../store/game-slice";
 
 import ModalContainer from "../components/UI/ModalContainer";
-import { styled, Button, TextField, Alert } from "@mui/material";
+import StartButton from "../components/UI/StartButton";
+import { styled, TextField, Alert } from "@mui/material";
 import WaitingRoom from "../components/Online/WaitingRoom";
 import Quizio from "../components/QuizGame/Quizio";
 
@@ -30,37 +32,36 @@ const InputNameModal = ({ gameType }) => {
     const inputName = e.target.value.trim();
     setShowMsg(false);
     dispatch(quizioActions.setUserName(inputName));
-  };
 
-  const checkValid = () => {
-    if (userName.length > 0 && userName.length <= 10) {
+    if (inputName.length > 0 && inputName.length <= 10) {
       setInvalidMsg("");
-      return true;
     } else {
       setInvalidMsg("請輸入1~10個字");
-      return false;
     }
   };
 
   const enterRoom = () => {
-    if (!checkValid) {
+    if (invalidMsg) {
       setShowMsg(true);
     } else {
       // 加入遊戲
       const newUserId = generateRandomString(10);
       const playerDbRef = ref(db, `/onlineRoom/${gameType}/${roomId}/players`);
+      const myRole = players ? "B" : "A";
       update(playerDbRef, {
         [newUserId]: {
           userName: userName,
           combo: 0,
           score: 0,
-          role: !players ? "A" : "B",
+          role: myRole,
         },
       })
         .then(() => {
           dispatch(quizioActions.setUserId(newUserId));
+          dispatch(gameActions.setCurPlayer(myRole));
         })
         .catch((e) => {
+          console.log(e);
           alert("連線錯誤，請再試一次");
         });
     }
@@ -70,11 +71,9 @@ const InputNameModal = ({ gameType }) => {
     <ModalContainer title="連線遊戲" onClose={() => {}}>
       <ModalContent>
         <TextField label="暱稱" onChange={changeNameHandler} value={userName} />
-        {showMsg && <Alert severity="error">{invalidMsg}</Alert>}
       </ModalContent>
-      <Button onClick={enterRoom} fullWidth>
-        連線
-      </Button>
+      <StartButton onClick={enterRoom}>連線</StartButton>
+      {showMsg && <Alert severity="error">{invalidMsg}</Alert>}
     </ModalContainer>
   );
 };
@@ -87,6 +86,10 @@ const QuizioPage = () => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    dispatch(gameActions.setNumPlayers(2));
+  }, []);
 
   useEffect(() => {
     const dbRef = ref(db, `/onlineRoom/quiz/${roomId}`);

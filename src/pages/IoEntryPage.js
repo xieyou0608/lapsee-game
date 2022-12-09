@@ -7,6 +7,7 @@ import { generateRandomString } from "../components/Online/random";
 
 import { styled, Button, TextField, Alert } from "@mui/material";
 import AppLayout from "../components/Layout/AppLayout";
+import StartButton from "../components/UI/StartButton";
 
 const EntryBox = styled("div")`
   display: flex;
@@ -76,9 +77,7 @@ const IoEntryPage = ({ gameType }) => {
     <AppLayout>
       <EntryBox>
         <h2>新遊戲 </h2>
-        <Button onClick={createGameRoom} fullWidth>
-          創建房間
-        </Button>
+        <StartButton onClick={createGameRoom}>創建房間</StartButton>
       </EntryBox>
       <br />
       <EntryBox>
@@ -89,9 +88,7 @@ const IoEntryPage = ({ gameType }) => {
           value={roomId}
         />
         {showMsg && <Alert severity="error">{invalidMsg}</Alert>}
-        <Button onClick={connectRoom} fullWidth>
-          加入房間
-        </Button>
+        <StartButton onClick={connectRoom}>加入房間</StartButton>
       </EntryBox>
     </AppLayout>
   );

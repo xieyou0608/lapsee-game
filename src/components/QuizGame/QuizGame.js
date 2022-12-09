@@ -12,14 +12,17 @@ import EndingModal from "../Game/EndingModal";
 
 import { drawQuestions } from "./drawQuestions";
 import { quizActions } from "../../store/quiz-slice";
-import ModalContainer from "../UI/ModalContainer";
-import { cardImages } from "../../assets/card-images/CardImages";
+import { gameActions } from "../../store/game-slice";
 
 // 單人知識王
 const QuizGame = () => {
   const dispatch = useDispatch();
   const { questions, round, score, combo, endMessage, chosen, showAnswer } =
     useSelector((state) => state.quiz);
+
+  useEffect(() => {
+    dispatch(gameActions.setNumPlayers(1));
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,27 +37,23 @@ const QuizGame = () => {
     dispatch(quizActions.chooseAnswer(option));
 
     setTimeout(() => {
-      dispatch(quizActions.resetChosen());
+      dispatch(quizActions.nextRound());
     }, [2000]);
   };
 
   const quizArea = (
     <div className={classes["quiz-area"]}>
       {questions && <Question question={questions[round]} round={round} />}
-      {questions && <Choices question={questions[round]} onChoose={choose} />}
+      {questions && (
+        <Choices
+          question={questions[round]}
+          onChoose={choose}
+          showAnswer={showAnswer}
+          chosen={chosen}
+        />
+      )}
     </div>
   );
-
-  let correctAnswer;
-  if (showAnswer) {
-    console.log(showAnswer);
-    const answer = questions[round].answer;
-    if (questions[round].type === "text") {
-      correctAnswer = <p>正確答案是 {answer} !</p>;
-    } else {
-      correctAnswer = <p>正確答案是 {cardImages[answer].name} !</p>;
-    }
-  }
 
   return (
     <GameLayout>
@@ -80,11 +79,7 @@ const QuizGame = () => {
           {quizArea}
         </div>
       </Box>
-      {showAnswer && (
-        <ModalContainer title={showAnswer} onClose={() => {}}>
-          {correctAnswer}
-        </ModalContainer>
-      )}
+
       {endMessage && (
         <EndingModal endMessage={endMessage} score={score} gameType="quiz" />
       )}

@@ -9,8 +9,8 @@
   cursor: pointer;
   transition: 0.5s;
 
-  width: 20vw;
-  height: 4vw;
+  width: 60%;
+  height: 8vh;
   margin: 0.5vw;
 }
 
@@ -23,10 +23,15 @@
   transform: scale(1);
 }
 
+.start-btn:disabled {
+  opacity: 0.5;
+  transform: scale(1);
+}
+
 @media (max-width: 600px) {
   .start-btn {
-    width: 60vw;
-    height: 10vw;
+    width: 60%;
+    height: 5vh;
     font-size: 5vw;
     margin: 1vw;
   }

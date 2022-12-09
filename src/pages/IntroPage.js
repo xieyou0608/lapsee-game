@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 import AppLayout from "../components/Layout/AppLayout";
 import classes from "./IntroPage.module.css";
+import StartButton from "../components/UI/StartButton";
+import { useNavigate } from "react-router-dom";
 
 import { IconButton } from "@mui/material";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
@@ -22,11 +23,6 @@ const IntroPage = () => {
     `${you}準備好一起改變媒體村莊的命運了嗎？`,
   ];
 
-  const navigate = useNavigate();
-  const goToGameIntro = () => {
-    navigate("/game-intro");
-  };
-
   const [page, setPage] = useState(0);
   const nextPage = () => {
     setPage((prev) => prev + 1);
@@ -35,6 +31,10 @@ const IntroPage = () => {
     setPage((prev) => prev - 1);
   };
 
+  const navigate = useNavigate();
+  const toGameIntro = () => {
+    navigate("/game-intro");
+  };
   return (
     <AppLayout>
       <div className={classes.intro}>
@@ -51,9 +51,7 @@ const IntroPage = () => {
             </IconButton>
           )}
           {page === story.length - 1 && (
-            <button className={classes.btn} onClick={goToGameIntro}>
-              出發!
-            </button>
+            <StartButton onClick={toGameIntro}>出發!</StartButton>
           )}
         </div>
       </div>

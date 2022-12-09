@@ -16,9 +16,9 @@ const gameSlice = createSlice({
     changePlayer(state) {
       state.curPlayer = state.curPlayer === "A" ? "B" : "A";
     },
-    // setScore(state, action) {
-    //   state.score = action.payload;
-    // },
+    setCurPlayer(state, action) {
+      state.curPlayer = action.payload;
+    },
   },
 });
 

@@ -3,18 +3,38 @@ import { useSelector } from "react-redux";
 import { db } from "../../services/firebase";
 import { ref, update, remove } from "firebase/database";
 
-import { Button, styled, Box } from "@mui/material";
+import StartButton from "../UI/StartButton";
+import { styled, Box, keyframes } from "@mui/material";
 import AppLayout from "../Layout/AppLayout";
-import playerA from "../../assets/images/LAPSEE-角色-2.png";
-import playerB from "../../assets/images/LAPSEE-角色-1.png";
 import { useNavigate } from "react-router-dom";
 import Player from "../Game/Player";
 import GameLayout from "../Layout/GameLayout";
 
+const PlayerBox = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+`;
+
+const clockAnimation = keyframes`
+ from {
+    transform: scale(2);
+  }
+
+  to {
+    transform:scale(1);
+  }
+`;
+
+const ClockH1 = styled("h1")`
+  animation: ${clockAnimation} 1s linear infinite;
+`;
+
 const WaitingRoom = ({ gameType, roomId }) => {
   const navigate = useNavigate();
   const { userId, players, status } = useSelector((state) => state.quizio);
-  const [timer, setTimer] = useState(5);
+  const [clock, setClock] = useState(8);
 
   const startGameHandler = () => {
     const roomDbRef = ref(db, `/onlineRoom/${gameType}/${roomId}`);
@@ -24,7 +44,7 @@ const WaitingRoom = ({ gameType, roomId }) => {
   useEffect(() => {
     if (status === "counting") {
       let interval = setInterval(() => {
-        setTimer((prev) => prev - 1);
+        setClock((prev) => prev - 1);
       }, 1000);
       return () => clearInterval(interval);
     }
@@ -32,11 +52,11 @@ const WaitingRoom = ({ gameType, roomId }) => {
 
   useEffect(() => {
     // 由其中一個人來改動 status
-    if (timer === 0 && players[userId].role === "A") {
+    if (clock === 0 && players[userId].role === "A") {
       const roomDbRef = ref(db, `/onlineRoom/${gameType}/${roomId}`);
       update(roomDbRef, { status: "playing" });
     }
-  }, [timer]);
+  }, [clock]);
 
   const leaveRoomHandler = () => {
     const userDbRef = ref(db, `/onlineRoom/quiz/${roomId}/players/${userId}`);
@@ -56,46 +76,33 @@ const WaitingRoom = ({ gameType, roomId }) => {
     userId: uid,
   }));
 
-  const srcMap = {
-    A: playerA,
-    B: playerB,
-  };
-
   return (
     <GameLayout>
-      {/* mobile */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-evenly",
-          }}
-        >
-          {players &&
-            playerList.map((player) => (
-              <Player key={player.userId} role={player.role} myScore={0} />
-            ))}
-        </Box>
-        {status === "waiting" && (
-          <>
-            <Button
-              onClick={startGameHandler}
-              disabled={playerList.length !== 2}
-            >
-              開始遊戲
-            </Button>
-            <br />
-            <Button onClick={leaveRoomHandler}>離開遊戲</Button>
-          </>
-        )}
-        {status === "counting" && <h1>{timer}</h1>}
-      </Box>
+      <PlayerBox>
+        {players &&
+          playerList.map((player) => (
+            <Player
+              key={player.userId}
+              role={player.role}
+              myScore={0}
+              isOnline
+              userName={player.userName}
+            />
+          ))}
+      </PlayerBox>
+      {status === "waiting" && (
+        <>
+          <StartButton
+            onClick={startGameHandler}
+            disabled={playerList.length !== 2}
+          >
+            開始遊戲
+          </StartButton>
+          <StartButton onClick={leaveRoomHandler}>離開遊戲</StartButton>
+        </>
+      )}
+      {status === "counting" && clock > 5 && <h1>準備開始...</h1>}
+      {status === "counting" && clock <= 5 && <ClockH1>{clock}</ClockH1>}
     </GameLayout>
   );
 };

@@ -1,39 +1,73 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { gameActions } from "../../store/game-slice";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 import classes from "./QuizGame.module.css";
-import { Box } from "@mui/material";
+import { Box, styled } from "@mui/material";
 
 import GameLayout from "../Layout/GameLayout";
 import Player from "../Game/Player";
 import Question from "./Question";
 import Choices from "./Choices";
 import EndingModal from "../Game/EndingModal";
-import playerA from "../../assets/images/LAPSEE-角色-2.png";
-import playerB from "../../assets/images/LAPSEE-角色-1.png";
 
 import { db } from "../../services/firebase";
 import { ref, update } from "firebase/database";
 
+const Mobile = styled("div")`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 90vh;
+
+  ${({ theme }) => theme.breakpoints.up("sm")} {
+    display: none;
+  }
+`;
+const PC = styled("div")`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  ${({ theme }) => theme.breakpoints.down("sm")} {
+    display: none;
+  }
+`;
+
 const Quizio = ({ roomId }) => {
   const {
-    userName,
     userId,
-    status,
-    round,
+    round: backEndRound,
     questions,
     players,
     endMessage,
     playerChosen,
   } = useSelector((state) => state.quizio);
 
+  const [round, setRound] = useState(0);
+  const [showEnding, setShowEnding] = useState(false);
+
+  useEffect(() => {
+    let timer;
+    if (backEndRound !== 0) {
+      timer = setTimeout(() => {
+        if (backEndRound === 10) {
+          setShowEnding(true);
+        } else {
+          setRound(backEndRound);
+        }
+      }, 2000);
+    }
+    return () => clearTimeout(timer);
+  }, [backEndRound]);
+
   let chosen = null;
+  let judged = false;
   if (playerChosen && playerChosen[round] && playerChosen[round][userId]) {
     chosen = playerChosen[round][userId].chosen;
+    judged = playerChosen[round][userId].judged;
   }
 
-  const choose = (option) => {
+  const chooseAnswer = (option) => {
     if (chosen !== null) return;
 
     update(ref(db, `/onlineRoom/quiz/${roomId}/playerChosen/${round}`), {
@@ -46,43 +80,45 @@ const Quizio = ({ roomId }) => {
     userId: uid,
   }));
 
-  const srcMap = {
-    A: playerA,
-    B: playerB,
-  };
+  const [player1, player2] = playerList.map((player) => (
+    <Player
+      key={player.userId}
+      role={player.role}
+      myScore={player.score}
+      isOnline
+      userName={player.userName}
+    />
+  ));
+
+  const quizArea = (
+    <div className={classes["quiz-area"]}>
+      <Question question={questions[round]} round={round} />
+      <Choices
+        question={questions[round]}
+        onChoose={chooseAnswer}
+        showAnswer={judged}
+        chosen={chosen}
+      />
+    </div>
+  );
 
   return (
     <React.Fragment>
       <GameLayout>
-        <Box>
-          <div className={classes["quiz-game"]}>
-            <div className={classes["players"]}>
-              {players &&
-                playerList.map((player) => (
-                  <div key={player.userId}>
-                    <img src={srcMap[player.role]} alt={player.role} />
-                    <div>{player.userName}</div>
-                    <div>combo: {player.combo}</div>
-                    <div>score: {player.score}</div>
-                  </div>
-                ))}
-            </div>
-            <div className={classes["quiz-area"]}>
-              {questions && (
-                <Question question={questions[round]} round={round} />
-              )}
-              {questions && (
-                <Choices
-                  question={questions[round]}
-                  onChoose={choose}
-                  chosen={chosen}
-                />
-              )}
-            </div>
+        <Mobile>
+          <div className={classes["players"]}>
+            {player1}
+            {player2}
           </div>
-        </Box>
+          {quizArea}
+        </Mobile>
+        <PC>
+          {player1}
+          {quizArea}
+          {player2}
+        </PC>
       </GameLayout>
-      {endMessage && <EndingModal endMessage={endMessage} gameType="quiz" />}
+      {showEnding && <EndingModal endMessage={endMessage} gameType="quiz" />}
     </React.Fragment>
   );
 };

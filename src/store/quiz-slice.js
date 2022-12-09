@@ -23,6 +23,7 @@ const quizSlice = createSlice({
     },
     chooseAnswer(state, action) {
       const option = action.payload;
+      state.chosen = option;
       const { questions, round } = state;
       if (option === questions[round].answer) {
         const combo = state.combo + 1;
@@ -34,7 +35,7 @@ const quizSlice = createSlice({
         state.showAnswer = "答錯了";
       }
     },
-    resetChosen(state) {
+    nextRound(state) {
       const { questions, round } = state;
       if (round !== questions.length - 1) {
         state.round += 1;

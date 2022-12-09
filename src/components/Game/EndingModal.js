@@ -55,7 +55,6 @@ const EndingModal = ({ endMessage, score, gameType }) => {
 
     try {
       const res = await RankService.postScore(gameType, inputName, score);
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
