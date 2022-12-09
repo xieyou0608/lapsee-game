@@ -9,9 +9,8 @@ import playerB from "../../assets/images/LAPSEE-角色-1.png";
 const Player = ({ role, myScore }) => {
   const { numPlayers, curPlayer } = useSelector((state) => state.game);
 
-  // const myScore = role === "A" ? score.A : score.B;
   const playerName = role === "A" ? "萊西" : "剖西";
-  const playerSrc = playerName === "萊西" ? playerA : playerB;
+  const playerSrc = role === "A" ? playerA : playerB;
 
   const isMyTurn = numPlayers === 2 && curPlayer === role;
   const playerStyle = `${classes["player-name"]} ${

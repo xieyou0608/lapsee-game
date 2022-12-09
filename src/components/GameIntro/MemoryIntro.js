@@ -1,5 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { gameActions } from "../../store/game-slice";
+
 import ModalContainer from "../UI/ModalContainer";
 import StartButton from "../UI/StartButton";
 import Setting from "../Setting/Setting";
@@ -10,8 +13,15 @@ const Intro = styled("div")`
 `;
 
 const MemoryIntro = (props) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const goToMemoryGame = () => {
+
+  const toMemoryGame = () => {
+    dispatch(gameActions.setNumPlayers(1));
+    navigate("/memory-game");
+  };
+  const twoPlayerStart = () => {
+    dispatch(gameActions.setNumPlayers(2));
     navigate("/memory-game");
   };
 
@@ -22,7 +32,8 @@ const MemoryIntro = (props) => {
       </Intro>
       <Setting />
 
-      <StartButton onClick={goToMemoryGame}>開始遊戲</StartButton>
+      <StartButton onClick={toMemoryGame}>單人遊戲</StartButton>
+      <StartButton onClick={twoPlayerStart}>雙人遊戲</StartButton>
     </ModalContainer>
   );
 };

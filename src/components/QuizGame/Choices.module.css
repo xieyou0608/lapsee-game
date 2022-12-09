@@ -55,7 +55,7 @@
 
 @media (min-width: 600px) {
   .choice:hover {
-    border-color: black;
+    transform: scale(1.15);
   }
 
   .choices {
@@ -65,13 +65,4 @@
   .images-grid {
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
-}
-
-.correct,
-.correct:hover {
-  border-color: green;
-}
-.wrong,
-.wrong:hover {
-  border-color: red;
 }

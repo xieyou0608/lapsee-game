@@ -1,7 +1,6 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { gameActions } from "../store/game-slice";
 
 import AppLayout from "../components/Layout/AppLayout";
 import Header from "../components/Layout/Header";
@@ -14,25 +13,15 @@ import RankLinks from "../components/Layout/RankLinks";
 import LapseeLinks from "../components/Layout/LapseeLinks";
 
 const HomePage = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const singlePlayerStart = () => {
-    dispatch(gameActions.setNumPlayers(1));
-    navigate("/intro");
-  };
-  const twoPlayerStart = () => {
-    dispatch(gameActions.setNumPlayers(2));
-    navigate("/intro");
-  };
-
   return (
     <AppLayout>
       <img className={classes["figure1"]} src={figure1} alt="" />
       <div className={classes.main}>
         <Header />
         <RankLinks />
-        <StartButton onClick={singlePlayerStart}>個人遊戲</StartButton>
-        <StartButton onClick={twoPlayerStart}>雙人遊戲</StartButton>
+        <Link to="/intro">
+          <StartButton type="button">開始遊戲</StartButton>
+        </Link>
         <LapseeLinks />
       </div>
       <img className={classes["figure2"]} src={figure2} alt="" />
