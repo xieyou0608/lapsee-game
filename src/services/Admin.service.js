@@ -2,12 +2,12 @@ import axios from "axios";
 
 // Firebase Database REST API
 const questionsAPI =
-  "https://lapsee-memory-game-default-rtdb.asia-southeast1.firebasedatabase.app/questions.json";
+  "https://lapsee-game-default-rtdb.asia-southeast1.firebasedatabase.app/questions.json";
 
 // Firebase Auth REST API
 const signInAPI =
   "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=";
-const API_KEY = "AIzaSyBVpV-3xn6GTU8pCJRwqL2AzjFbM6vROVE";
+const API_KEY = "AIzaSyAMr6forJbOnPT1hE39slIqSoUo394JE9Q";
 
 class AdminService {
   login(email, password) {

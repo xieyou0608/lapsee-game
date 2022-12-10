@@ -1,15 +1,19 @@
 import axios from "axios";
 
-// Firebase Functions
-let functions_API = "https://asia-east1-lapsee-memory-game.cloudfunctions.net/";
-if (window.location.hostname === "localhost") {
-  functions_API = "http://127.0.0.1:5001/lapsee-memory-game/asia-east1/";
-}
+// RTDB REST API
+const RANK_REST_API =
+  "https://lapsee-game-default-rtdb.asia-southeast1.firebasedatabase.app/rank/";
 
-const RANK_API = functions_API + "api/rank/";
+// Firebase Functions
+let functions_API = "https://asia-east1-lapsee-game.cloudfunctions.net/api";
+// if (window.location.hostname === "localhost") {
+//   functions_API = "http://127.0.0.1:5001/lapsee-game/asia-east1/api";
+// }
+
+const RANK_API = functions_API + "/rank/";
 class RankService {
   getRank(game) {
-    return axios.get(RANK_API + game);
+    return axios.get(RANK_REST_API + game + ".json");
   }
   postScore(game, name, score) {
     return axios.post(RANK_API + game, {

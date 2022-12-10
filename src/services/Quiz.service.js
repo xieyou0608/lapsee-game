@@ -1,13 +1,14 @@
 import axios from "axios";
 
 // Firebase Functions
-let functions_API = "https://asia-east1-lapsee-memory-game.cloudfunctions.net/";
+let functions_API = "https://asia-east1-lapsee-game.cloudfunctions.net/api";
+
 // if (window.location.hostname === "localhost") {
-//   functions_API = "http://127.0.0.1:5001/lapsee-memory-game/asia-east1/";
+//   functions_API = "http://127.0.0.1:5001/lapsee-game/asia-east1/api";
 // }
 
-const QUIZ_API = functions_API + "api/questions/random/";
-const QUIZ_IO_API = functions_API + "api/onlineRoom/quiz/";
+const QUIZ_API = functions_API + "/questions/random/";
+const QUIZ_IO_API = functions_API + "/onlineRoom/quiz/";
 
 class QuizService {
   getRandomQuestions() {

@@ -43,9 +43,10 @@ const WaitingRoom = ({ gameType, roomId }) => {
     update(roomDbRef, { status: "counting" });
   };
 
+  let interval = null;
   useEffect(() => {
     if (status === "counting") {
-      let interval = setInterval(() => {
+      interval = setInterval(() => {
         setClock((prev) => prev - 1);
       }, 1000);
       return () => clearInterval(interval);
@@ -54,7 +55,8 @@ const WaitingRoom = ({ gameType, roomId }) => {
 
   useEffect(() => {
     // 由其中一個人來改動 status
-    if (clock === 0 && players[userId].role === "A") {
+    if (clock <= 0 && players[userId].role === "A") {
+      clearInterval(interval);
       const roomDbRef = ref(db, `/onlineRoom/${gameType}/${roomId}`);
       update(roomDbRef, { status: "playing" });
     }
