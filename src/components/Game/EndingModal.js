@@ -9,7 +9,7 @@ import MessageModal from "../UI/MessageModal";
 import { winImageA, winImageB } from "../../assets/card-images/CardImages";
 import RankService from "../../services/Rank.service";
 
-const EndingModal = ({ endMessage, score, gameType }) => {
+const EndingModal = ({ endMessage, score, gameType, isOnline }) => {
   const navigate = useNavigate();
   const numPlayers = useSelector((state) => state.game.numPlayers);
 
@@ -43,6 +43,7 @@ const EndingModal = ({ endMessage, score, gameType }) => {
     <div className={classes["pk-ending"]}>
       {endMessage === "萊西贏了！" && <img src={winImageA} alt="" />}
       {endMessage === "剖西贏了！" && <img src={winImageB} alt="" />}
+      {isOnline && <img src={winImageA} alt="" />}
       <p>{endMessage}</p>
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import QuizService from "../../services/Quiz.service";
 
 import classes from "./QuizGame.module.css";
 import { Box, styled } from "@mui/material";
@@ -9,9 +10,6 @@ import Player from "../Game/Player";
 import Question from "./Question";
 import Choices from "./Choices";
 import EndingModal from "../Game/EndingModal";
-
-import { db } from "../../services/firebase";
-import { ref, update } from "firebase/database";
 
 const Clock = styled("div")`
   display: flex;
@@ -70,6 +68,19 @@ const Quizio = ({ roomId }) => {
   const [showEnding, setShowEnding] = useState(false);
   const [clock, setClock] = useState(MAX_CLOCK);
 
+  let chosen = null; // 用來在前端顯示
+  let judged = false;
+  if (playerChosen && playerChosen[round] && playerChosen[round][userId]) {
+    chosen = playerChosen[round][userId].chosen;
+    judged = playerChosen[round][userId].judged;
+  }
+
+  const chooseAnswer = async (option) => {
+    if (chosen !== null) return;
+    await QuizService.postChosen(roomId, round, userId, option);
+  };
+
+  // 答題倒數計時
   useEffect(() => {
     let interval = setInterval(() => {
       setClock((prev) => prev - 1);
@@ -78,41 +89,29 @@ const Quizio = ({ roomId }) => {
   }, []);
 
   useEffect(() => {
-    if (clock === 0) {
+    if (clock === 0 && chosen === null) {
       chooseAnswer(-1);
     }
   }, [clock]);
 
+  // 兩個人都答題之後
+  // 等後端 trigger 更新回合後再過 1 秒更新前端顯示的回合
   useEffect(() => {
     let timer;
     if (backEndRound !== 0) {
       timer = setTimeout(() => {
-        if (backEndRound === 10) {
+        if (backEndRound == 10) {
           setShowEnding(true);
         } else {
           setRound(backEndRound);
           setClock(MAX_CLOCK);
         }
-      }, 2000);
+      }, 1000);
     }
     return () => clearTimeout(timer);
   }, [backEndRound]);
 
-  let chosen = null;
-  let judged = false;
-  if (playerChosen && playerChosen[round] && playerChosen[round][userId]) {
-    chosen = playerChosen[round][userId].chosen;
-    judged = playerChosen[round][userId].judged;
-  }
-
-  const chooseAnswer = (option) => {
-    if (chosen !== null) return;
-
-    update(ref(db, `/onlineRoom/quiz/${roomId}/playerChosen/${round}`), {
-      [userId]: { chosen: option, judged: false },
-    });
-  };
-
+  // 處理 Layout
   const playerList = Object.keys(players).map((uid) => ({
     ...players[uid],
     userId: uid,
@@ -175,7 +174,9 @@ const Quizio = ({ roomId }) => {
           {player2}
         </PC>
       </GameLayout>
-      {showEnding && <EndingModal endMessage={endMessage} gameType="quiz" />}
+      {showEnding && (
+        <EndingModal endMessage={endMessage} gameType="quiz" isOnline />
+      )}
     </React.Fragment>
   );
 };

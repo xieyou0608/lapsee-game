@@ -28,11 +28,21 @@
   transform: scale(1);
 }
 
+.flexiale {
+  width: 100%;
+  height: 100%;
+}
+
 @media (max-width: 600px) {
   .start-btn {
     width: 60%;
     height: 5vh;
     font-size: 5vw;
     margin: 1vw;
+  }
+
+  .flexiale {
+    width: 100%;
+    height: 100%;
   }
 }
